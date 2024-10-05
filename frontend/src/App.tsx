@@ -10,7 +10,9 @@ import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Group from "./pages/Group";
 
+
 function App() {
+
   return (
     <>
       <MantineProvider defaultColorScheme="dark">

@@ -3,36 +3,38 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown } from "@tabler/icons-react";
 import classes from "./HeaderMenu.module.css";
 
-const links = [
-  { link: "/about", label: "Features" },
-  {
-    link: "#1",
-    label: "Learn",
-    links: [
-      { link: "/docs", label: "Documentation" },
-      { link: "/resources", label: "Resources" },
-      { link: "/community", label: "Community" },
-      { link: "/blog", label: "Blog" },
-    ],
-  },
-  { link: "/about", label: "About" },
-  { link: "/pricing", label: "Pricing" },
-  {
-    link: "#2",
-    label: "Support",
-    links: [
-      { link: "/faq", label: "FAQ" },
-      { link: "/demo", label: "Book a demo" },
-      { link: "/forums", label: "Forums" },
-    ],
-  },
+import { LightDarkToggle } from "../LightDarkToggle/LightDarkToggle";
+
+const links: any[] = [
+  // { link: "/about", label: "Features" },
+  // {
+  //   link: "#1",
+  //   label: "Learn",
+  //   links: [
+  //     { link: "/docs", label: "Documentation" },
+  //     { link: "/resources", label: "Resources" },
+  //     { link: "/community", label: "Community" },
+  //     { link: "/blog", label: "Blog" },
+  //   ],
+  // },
+  // { link: "/about", label: "About" },
+  // { link: "/pricing", label: "Pricing" },
+  // {
+  //   link: "#2",
+  //   label: "Support",
+  //   links: [
+  //     { link: "/faq", label: "FAQ" },
+  //     { link: "/demo", label: "Book a demo" },
+  //     { link: "/forums", label: "Forums" },
+  //   ],
+  // },
 ];
 
 export function HeaderMenu() {
   const [opened, { toggle }] = useDisclosure(false);
 
-  const items = links.map((link) => {
-    const menuItems = link.links?.map((item) => (
+  const items: any[] = links.map((link) => {
+    const menuItems = link.links?.map((item: any) => (
       <Menu.Item key={item.link}>{item.label}</Menu.Item>
     ));
 
@@ -76,7 +78,7 @@ export function HeaderMenu() {
   return (
     <>
       <header className={classes.header}>
-        <Container size="md">
+        <Container size="xl">
           <div className={classes.inner}>
             <Group gap={5} visibleFrom="sm">
               {items}
@@ -87,6 +89,7 @@ export function HeaderMenu() {
               size="sm"
               hiddenFrom="sm"
             />
+            <LightDarkToggle />
           </div>
         </Container>
       </header>

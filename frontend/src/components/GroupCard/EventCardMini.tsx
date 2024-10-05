@@ -31,7 +31,7 @@ export default function EventCardMini(props: EventCardMiniProps) {
       radius={"lg"}
     >
       <Flex direction={"column"} align={"center"}>
-        <Text fw={500} c={"gray.7"}>
+        <Text fw={500}>
           {eventName}
         </Text>
         <Avatar color="cyan" radius="xl" mt={"xs"}>
