@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Group, Code } from '@mantine/core';
+import { Group, Code, Box } from '@mantine/core';
 import {
   IconBellRinging,
   IconFingerprint,
@@ -43,7 +43,8 @@ export function NavbarSimple() {
   ));
 
   return (
-    <nav className={classes.navbar}>
+    <Box visibleFrom='sm'>
+      <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header} justify="space-between">
           <p>LOGO HERE</p>
@@ -64,5 +65,6 @@ export function NavbarSimple() {
         </a>
       </div>
     </nav>
+    </Box>
   );
 }
