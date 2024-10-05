@@ -29,7 +29,7 @@ export default function GroupCard() {
           Group Name
         </Text>
 
-        <Flex direction={"row"} gap={"md"} justify={"center"}>
+        <Flex direction={"row"} px={"md"} justify={"center"} gap={"lg"}>
           {eventCardData.map((eventCardData, index) => {
             return (
               <EventCardMini

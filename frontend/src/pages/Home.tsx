@@ -1,6 +1,8 @@
 import Layout from "./Layout";
 
 import GroupCard from "../components/GroupCard/GroupCard";
+import JoinCreateGroupCard from "../components/JoinCreateGroupCard/JoinCreateGroupCard";
+
 import { Flex } from "@mantine/core";
 
 export default function Home() {
@@ -11,6 +13,7 @@ export default function Home() {
           <GroupCard />
           <GroupCard />
           <GroupCard />
+          <JoinCreateGroupCard />
         </Flex>
       </div>
     </Layout>
