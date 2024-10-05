@@ -38,7 +38,7 @@ export default function Login() {
     if (isAuthenticated) {
       navigate("/home");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (event: any) => {
     // TODO: check username and password using /login route
