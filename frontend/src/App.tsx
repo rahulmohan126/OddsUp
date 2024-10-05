@@ -4,9 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // All packages except `@mantine/hooks` require styles imports
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
-
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Landing from "./pages/Landing";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
       <MantineProvider>
         <BrowserRouter>
           <Routes>
-            {/* <Route path="/" element={<Login />} /> */}
+            <Route path="/" element={<Landing />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             {/* Example of dynamic route */}
