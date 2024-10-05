@@ -1,5 +1,9 @@
+import Layout from "./Layout";
+
 export default function Home() {
   return (
-    <div>Home</div>
-  )
+    <Layout>
+      <div style={{height: "100%"}}>Home</div>
+    </Layout>
+  );
 }
