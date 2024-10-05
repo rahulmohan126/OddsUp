@@ -7,6 +7,7 @@ import { MantineProvider } from "@mantine/core";
 
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
             {/* Example of dynamic route */}
             {/* <Route path="/profile/:username/" element={<Profile />} /> */}
             {/* Example of default route */}
