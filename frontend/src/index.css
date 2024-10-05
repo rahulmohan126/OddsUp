@@ -1,5 +1,23 @@
-@layer tailwind {
-    @tailwind base;
-}
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@keyframes pulse-gradient {
+    0%, 100% {
+      background-position: 50% 50%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+  }
+  
+  .animate-gradient-pulse {
+    animation: pulse-gradient 8s ease infinite;
+  }
+  
+  .bg-siri-gradient {
+    background: radial-gradient(circle at center, #6b46c1, #434190, #1a202c);
+    background-size: 200% 200%;
+  }
+  
