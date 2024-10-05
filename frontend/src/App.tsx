@@ -6,6 +6,7 @@ import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 
 import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -15,10 +16,11 @@ function App() {
           <Routes>
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
             {/* Example of dynamic route */}
             {/* <Route path="/profile/:username/" element={<Profile />} /> */}
             {/* Example of default route */}
-            {/* <Route path="*" element={<Login />} /> */}
+            <Route path="*" element={<Login />} />
           </Routes>
         </BrowserRouter>
       </MantineProvider>

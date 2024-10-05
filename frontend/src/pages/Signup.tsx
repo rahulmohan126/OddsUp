@@ -108,7 +108,7 @@ import {
     return (
       <Flex align={"center"} justify={"center"} h={"100vh"}>
         <Container size={420} my={40}>
-          <Title ta="center">Welcome to OddsUp</Title>
+          <Title ta="center">Welcome to {config.appName}</Title>
           <Text c="dimmed" size="sm" ta="center" mt={5}>
             Already have an account?{" "}
             <Anchor
