@@ -3,7 +3,7 @@ import { Challenge, Option, OUResponse, resError, resSuccess } from "../util/mod
 import { CreateChallengeReq, GetChallengeReq, MakeSelectionReq, PayoutReq } from "../util/reqBody";
 
 export async function createChallenge(req: CreateChallengeReq): Promise<OUResponse> {
-  const challengeInfo = await create(req.name);
+  const challengeInfo = await create(req.name, req.groupId);
   if (!challengeInfo) {
     return resError("Couldn't create challenge");
   }
