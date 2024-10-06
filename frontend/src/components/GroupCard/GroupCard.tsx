@@ -2,6 +2,7 @@ import { Paper, Flex, Text } from "@mantine/core";
 
 import LeaderboardPositionProgressBar from "./LeaderboardPositionProgressBar";
 import EventCardMini from "./EventCardMini";
+import { useNavigate } from "react-router-dom";
 
 const eventCardData = [
   {
@@ -27,8 +28,24 @@ interface GroupCardProps {
 }
 
 export default function GroupCard(props: GroupCardProps) {
+  const navigate = useNavigate();
+
+  const clickCard = (e: any) => {
+    e.preventDefault();
+    navigate(`/group/${props.id_}`);
+  };
+
   return (
-    <Paper withBorder={true} radius={"md"} shadow="sm" miw={"376px"} maw={"100%"} style={{flexGrow: 1}} p={"md"}>
+    <Paper
+      withBorder={true}
+      radius={"md"}
+      shadow="sm"
+      miw={"376px"}
+      maw={"100%"}
+      style={{ flexGrow: 1 }}
+      p={"md"}
+      onClick={clickCard}
+    >
       <Flex direction={"column"} w={"100%"} h={"100%"} gap={"lg"}>
         <Text size="lg" fw={500}>
           {props.name}

@@ -1,38 +1,75 @@
 import Layout from "./Layout";
-import { Link } from 'react-router-dom';
-import { Card, Button, Badge, Box, Tabs } from '@mantine/core';
-import { motion } from 'framer-motion';
-import React from "react";
+import { Link } from "react-router-dom";
+import { Card, Button, Badge, Box, Tabs } from "@mantine/core";
+import { motion } from "framer-motion";
+import React, { useEffect } from "react";
 import { FaChevronRight, FaGem, FaPlus } from "react-icons/fa6";
-import Avatar, { genConfig } from 'react-nice-avatar'
+import Avatar, { genConfig } from "react-nice-avatar";
+import { useParams } from "react-router-dom";
+import config from "../../config.json";
+import axios from "axios";
 
 // Example group data (this would typically come from your API or database)
 const groupData = {
-  id: '1',
-  name: 'Dorm 101 Bets',
-  description: 'Fun challenges for the coolest dorm on campus!',
+  id: "1",
+  name: "Dorm 101 Bets",
+  description: "Fun challenges for the coolest dorm on campus!",
   members: 42,
   challenges: [
-    { id: '1', question: 'Will Professor Smith wear his famous bowtie to the lecture this week?', votes: 37, endDate: '2023-05-20' },
-    { id: '2', question: 'How many slices of pizza will be left at the dorm party on Friday night?', votes: 28, endDate: '2023-05-22' },
-    { id: '3', question: 'Will the campus squirrels successfully steal food from at least 3 students this week?', votes: 56, endDate: '2023-05-25' },
-    { id: '4', question: 'What will be the most popular coffee order at the campus café on Monday morning?', votes: 41, endDate: '2023-05-23' },
-  ]
+    {
+      id: "1",
+      question:
+        "Will Professor Smith wear his famous bowtie to the lecture this week?",
+      votes: 37,
+      endDate: "2023-05-20",
+    },
+    {
+      id: "2",
+      question:
+        "How many slices of pizza will be left at the dorm party on Friday night?",
+      votes: 28,
+      endDate: "2023-05-22",
+    },
+    {
+      id: "3",
+      question:
+        "Will the campus squirrels successfully steal food from at least 3 students this week?",
+      votes: 56,
+      endDate: "2023-05-25",
+    },
+    {
+      id: "4",
+      question:
+        "What will be the most popular coffee order at the campus café on Monday morning?",
+      votes: 41,
+      endDate: "2023-05-23",
+    },
+  ],
 };
 
 // Example leaderboard data
 const leaderboardData = [
-  { name: 'Alex', coins: 120 },
-  { name: 'Jordan', coins: 105, },
-  { name: 'Taylor', coins: 99 },
-  { name: 'Morgan', coins: 88 },
-  { name: 'Casey', coins: 77 },
+  { name: "Alex", coins: 120 },
+  { name: "Jordan", coins: 105 },
+  { name: "Taylor", coins: 99 },
+  { name: "Morgan", coins: 88 },
+  { name: "Casey", coins: 77 },
 ];
 
 // Example my challenges data
 const myChallenges = [
-  { id: '5', question: 'Will the library extend its hours during finals week?', votes: 45, endDate: '2023-05-30' },
-  { id: '6', question: 'How many students will attend the upcoming campus concert?', votes: 62, endDate: '2023-06-05' },
+  {
+    id: "5",
+    question: "Will the library extend its hours during finals week?",
+    votes: 45,
+    endDate: "2023-05-30",
+  },
+  {
+    id: "6",
+    question: "How many students will attend the upcoming campus concert?",
+    votes: 62,
+    endDate: "2023-06-05",
+  },
 ];
 
 interface GroupProps {
@@ -40,6 +77,29 @@ interface GroupProps {
 }
 
 export default function Group() {
+  const { id_ } = useParams<string>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = `${config.serverRootURL}/group/getInfo`;
+      const body = { groupInfo: id_ };
+
+      try {
+        const res = await axios.post(url, body);
+        console.log(res)
+
+        if (!res.data.success) {
+          console.log("Error: " + res);
+        }
+
+        console.log("Group data: ", res.data.data);
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <Layout>
       <motion.div
@@ -49,7 +109,6 @@ export default function Group() {
         transition={{ duration: 0.5 }}
       >
         <div className="grid grid-cols-1 gap-4 mx-auto px-4 py-8">
-
           {/* Main Content */}
           <div className="col-span-2">
             <motion.div
@@ -63,11 +122,19 @@ export default function Group() {
                   <h2 className="text-5xl font-bold">{groupData.name}</h2>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <Card className="rounded-xl p-10 font-bold text-5xl">{groupData.name[0]}</Card>
-                  <div className="text-sm text-muted-foreground px-2 rounded-full w-fit py-1 font-semibold">{groupData.members} Members</div>
+                  <Card className="rounded-xl p-10 font-bold text-5xl">
+                    {groupData.name[0]}
+                  </Card>
+                  <div className="text-sm text-muted-foreground px-2 rounded-full w-fit py-1 font-semibold">
+                    {groupData.members} Members
+                  </div>
                 </div>
               </div>
-              <Button variant="light" fullWidth className="w-fit hover:opacity-95 transition-all duration-300 ease-in-out mt-4">
+              <Button
+                variant="light"
+                fullWidth
+                className="w-fit hover:opacity-95 transition-all duration-300 ease-in-out mt-4"
+              >
                 Invite Friends
               </Button>
             </motion.div>
@@ -81,16 +148,24 @@ export default function Group() {
                   </Tabs.List>
 
                   <Tabs.Panel value="all" pt="xs">
-                    <h2 className="text-2xl font-semibold mb-4 mt-4">All Challenges</h2>
+                    <h2 className="text-2xl font-semibold mb-4 mt-4">
+                      All Challenges
+                    </h2>
                     <div className="grid gap-6 md:grid-cols-2">
                       {groupData.challenges.map((challenge) => (
-                        <Link to={'/challenge'} key={challenge.id}>
-                          <motion.div
-                            whileHover={{ scale: 1.02 }}
-                          >
-                            <Card shadow="md" p="lg" className="max-w-96" radius="md" withBorder>
+                        <Link to={"/challenge"} key={challenge.id}>
+                          <motion.div whileHover={{ scale: 1.02 }}>
+                            <Card
+                              shadow="md"
+                              p="lg"
+                              className="max-w-96"
+                              radius="md"
+                              withBorder
+                            >
                               <div className="mb-4">
-                                <Badge color="blue" variant="light">Active</Badge>
+                                <Badge color="blue" variant="light">
+                                  Active
+                                </Badge>
                               </div>
                               <h3 className="text-lg">{challenge.question}</h3>
                               <div className="text-sm text-muted-foreground mt-2">
@@ -107,16 +182,24 @@ export default function Group() {
                   </Tabs.Panel>
 
                   <Tabs.Panel value="my" pt="xs">
-                    <h2 className="text-2xl font-semibold mb-4 mt-4">My Challenges</h2>
+                    <h2 className="text-2xl font-semibold mb-4 mt-4">
+                      My Challenges
+                    </h2>
                     <div className="grid gap-6 md:grid-cols-2">
                       {myChallenges.map((challenge) => (
-                        <Link to={'/challenge'} key={challenge.id}>
-                          <motion.div
-                            whileHover={{ scale: 1.02 }}
-                          >
-                            <Card shadow="md" p="lg" className="max-w-96" radius="md" withBorder>
+                        <Link to={"/challenge"} key={challenge.id}>
+                          <motion.div whileHover={{ scale: 1.02 }}>
+                            <Card
+                              shadow="md"
+                              p="lg"
+                              className="max-w-96"
+                              radius="md"
+                              withBorder
+                            >
                               <div className="mb-4">
-                                <Badge color="green" variant="light">My Challenge</Badge>
+                                <Badge color="green" variant="light">
+                                  My Challenge
+                                </Badge>
                               </div>
                               <h3 className="text-lg">{challenge.question}</h3>
                               <div className="text-sm text-muted-foreground mt-2">
@@ -136,7 +219,13 @@ export default function Group() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300" leftSection={<FaPlus />}>
+                      <Button
+                        component={Link}
+                        to="/create-challenge"
+                        size="lg"
+                        className="hover:shadow-lg transition-shadow duration-300"
+                        leftSection={<FaPlus />}
+                      >
                         Create New Challenge
                       </Button>
                     </motion.div>
@@ -164,14 +253,21 @@ export default function Group() {
                       >
                         <Card className="flex flex-row items-center justify-between gap-4 p-4">
                           <div className="flex items-center gap-3">
-                            <Avatar className="w-12 h-12" {...genConfig(user.name)} />
+                            <Avatar
+                              className="w-12 h-12"
+                              {...genConfig(user.name)}
+                            />
                             <div>
-                              <h3 className="text-lg font-semibold">{user.name}</h3>
+                              <h3 className="text-lg font-semibold">
+                                {user.name}
+                              </h3>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 text-yellow-300">
                             <FaGem />
-                            <span className="font-semibold text-lg">{user.coins}</span>
+                            <span className="font-semibold text-lg">
+                              {user.coins}
+                            </span>
                           </div>
                         </Card>
                       </motion.div>
