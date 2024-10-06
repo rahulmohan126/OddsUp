@@ -1,5 +1,5 @@
 import { checkUsernameAvailable, createUser, getGroups, getInfo, loginUser, registerUser } from "../services/user";
-import { OUResponse, resError, resSuccess, User, UserWithToken } from "../util/models";
+import { OUResponse, resError, resSuccess, User, UserBasic, UserWithToken } from "../util/models";
 import { LoginReq, SignInReq, GetUserReq } from "../util/reqBody";
 
 export async function signUp(req: SignInReq): Promise<OUResponse> {
@@ -47,4 +47,13 @@ export async function getAllUserInfo(req: GetUserReq): Promise<OUResponse> {
   }
 
   return resSuccess({ ...info, groups } as User);
+}
+
+export async function getBasicUserInfo(req: GetUserReq): Promise<OUResponse> {
+  let info = await getInfo(req.userId);
+  if (!info) {
+    return resError("Failed to retrieve user info");
+  }
+
+  return resSuccess(info);
 }
