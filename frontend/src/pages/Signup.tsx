@@ -17,10 +17,14 @@ import { PasswordStrength } from "../components/PasswordStrength";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useIsAuthenticated from "../hooks/useIsAuthenticated";
+
+//   import useAuthentication from "../hooks/useAuthentication";
 
 import axios from "axios";
 import config from "../../config.json";
+import { PiSparkleFill } from "react-icons/pi";
+import Spline from "@splinetool/react-spline";
+import useIsAuthenticated from "../hooks/useIsAuthenticated";
 
 axios.defaults.withCredentials = true;
 
@@ -71,6 +75,7 @@ export default function Signup() {
       return;
     }
 
+
     const url = `${rootURL}/user/signup`;
     const body = {
       username: username,
@@ -120,7 +125,7 @@ export default function Signup() {
             component="button"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/");
+              navigate("/login");
             }}
           >
             Sign in
@@ -171,6 +176,12 @@ export default function Signup() {
           </Button>
         </Paper>
       </Container>
+      <div className="bg -z-10 absolute inset-0 opacity-80"></div>
+      <div className='absolute -z-10 right-96 -bottom-10 w-96 h-96 items-center justify-center'>
+        <div className='w-[90rem]'>
+          <Spline scene="https://prod.spline.design/UZiz8e8YDo38sP5Z/scene.splinecode" />
+        </div>
+      </div>
     </Flex>
   );
 }

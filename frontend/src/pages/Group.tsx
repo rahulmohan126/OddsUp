@@ -1,9 +1,9 @@
 import Layout from "./Layout";
 import { Link } from 'react-router-dom';
-import { Card, Button, Badge, Box } from '@mantine/core';
+import { Card, Button, Badge, Box, Tabs } from '@mantine/core';
 import { motion } from 'framer-motion';
 import React from "react";
-import { FaChevronRight, FaGem } from "react-icons/fa6";
+import { FaChevronRight, FaGem, FaPlus } from "react-icons/fa6";
 import Avatar, { genConfig } from 'react-nice-avatar'
 
 // Example group data (this would typically come from your API or database)
@@ -22,11 +22,17 @@ const groupData = {
 
 // Example leaderboard data
 const leaderboardData = [
-  { id: '1', name: 'Alex', coins: 120, avatar: '/avatar1.png' },
-  { id: '2', name: 'Jordan', coins: 105, avatar: '/avatar2.png' },
-  { id: '3', name: 'Taylor', coins: 99, avatar: '/avatar3.png' },
-  { id: '4', name: 'Morgan', coins: 88, avatar: '/avatar4.png' },
-  { id: '5', name: 'Casey', coins: 77, avatar: '/avatar5.png' },
+  { name: 'Alex', coins: 120 },
+  { name: 'Jordan', coins: 105, },
+  { name: 'Taylor', coins: 99 },
+  { name: 'Morgan', coins: 88 },
+  { name: 'Casey', coins: 77 },
+];
+
+// Example my challenges data
+const myChallenges = [
+  { id: '5', question: 'Will the library extend its hours during finals week?', votes: 45, endDate: '2023-05-30' },
+  { id: '6', question: 'How many students will attend the upcoming campus concert?', votes: 62, endDate: '2023-06-05' },
 ];
 
 export default function Group() {
@@ -57,53 +63,85 @@ export default function Group() {
                   <div className="text-sm text-muted-foreground px-2 rounded-full w-fit py-1 font-semibold">{groupData.members} Members</div>
                 </div>
               </div>
-              <Button variant="light" fullWidth className="w-fit hover:opacity-95 transition-all duration-300 ease-in-out">
+              <Button variant="light" fullWidth className="w-fit hover:opacity-95 transition-all duration-300 ease-in-out mt-4">
                 Invite Friends
               </Button>
             </motion.div>
 
             <div className="flex flex-row flex-wrap gap-10">
-              <div className="col-span-1">
+              <div className="col-span-1 w-fit">
+                <Tabs defaultValue="all">
+                  <Tabs.List>
+                    <Tabs.Tab value="all">All Challenges</Tabs.Tab>
+                    <Tabs.Tab value="my">My Challenges</Tabs.Tab>
+                  </Tabs.List>
 
-                <h2 className="text-2xl font-semibold mb-4">Challenges</h2>
-                <div className="grid gap-6 md:grid-cols-2">
-                  {groupData.challenges.map((challenge) => (
-                    <Link to={'/challenge'}>
-                      <motion.div
-                        key={challenge.id}
-                        whileHover={{ scale: 1.02 }}
-                      >
-                        <Card shadow="md" p="lg" className="max-w-96" radius="md" withBorder>
-                          <div className="mb-4">
-                            <Badge color="blue" variant="light">Active</Badge>
-                          </div>
-                          <h3 className="text-lg">{challenge.question}</h3>
-                          <div className="text-sm text-muted-foreground mt-2">
-                            Votes: {challenge.votes} <br />
-                          </div>
-                          <div className="flex flex-rowitems-end justify-end mt-4">
-                            <FaChevronRight />
-                          </div>
-                        </Card>
-                      </motion.div>
-                    </Link>
-                  ))}
-                </div>
-                <motion.div
-                  className="mt-8 text-center"
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
+                  <Tabs.Panel value="all" pt="xs">
+                    <h2 className="text-2xl font-semibold mb-4 mt-4">All Challenges</h2>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      {groupData.challenges.map((challenge) => (
+                        <Link to={'/challenge'} key={challenge.id}>
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                          >
+                            <Card shadow="md" p="lg" className="max-w-96" radius="md" withBorder>
+                              <div className="mb-4">
+                                <Badge color="blue" variant="light">Active</Badge>
+                              </div>
+                              <h3 className="text-lg">{challenge.question}</h3>
+                              <div className="text-sm text-muted-foreground mt-2">
+                                Votes: {challenge.votes} <br />
+                              </div>
+                              <div className="flex flex-row items-end justify-end mt-4">
+                                <FaChevronRight />
+                              </div>
+                            </Card>
+                          </motion.div>
+                        </Link>
+                      ))}
+                    </div>
+                  </Tabs.Panel>
 
-                  transition={{ delay: 0.3 }}
-                >
-                  <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300">
-                    Create New Challenge
-                  </Button>
-                </motion.div>
+                  <Tabs.Panel value="my" pt="xs">
+                    <h2 className="text-2xl font-semibold mb-4 mt-4">My Challenges</h2>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      {myChallenges.map((challenge) => (
+                        <Link to={'/challenge'} key={challenge.id}>
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                          >
+                            <Card shadow="md" p="lg" className="max-w-96" radius="md" withBorder>
+                              <div className="mb-4">
+                                <Badge color="green" variant="light">My Challenge</Badge>
+                              </div>
+                              <h3 className="text-lg">{challenge.question}</h3>
+                              <div className="text-sm text-muted-foreground mt-2">
+                                Votes: {challenge.votes} <br />
+                              </div>
+                              <div className="flex flex-row items-end justify-end mt-4">
+                                <FaChevronRight />
+                              </div>
+                            </Card>
+                          </motion.div>
+                        </Link>
+                      ))}
+                    </div>
+                    <motion.div
+                      className="mt-8 text-center"
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300" leftSection={<FaPlus />}>
+                        Create New Challenge
+                      </Button>
+                    </motion.div>
+                  </Tabs.Panel>
+                </Tabs>
               </div>
 
               {/* Leaderboard */}
-              <Box className="col-span-1">
+              <Box className="col-span-1 w-full md:w-auto">
                 <motion.div
                   className="p-6 rounded-lg shadow-lg"
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -115,7 +153,7 @@ export default function Group() {
                   <div className="space-y-4">
                     {leaderboardData.map((user, index) => (
                       <motion.div
-                        key={user.id}
+                        key={user.name}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: index * 0.2, duration: 0.5 }}
