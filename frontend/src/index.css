@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @keyframes pulse-gradient {
     0%, 100% {
       background-position: 50% 50%;

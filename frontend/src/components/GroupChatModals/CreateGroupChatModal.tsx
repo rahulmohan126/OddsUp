@@ -56,7 +56,7 @@ export default function CreateGroupChatModal(props: CreateGroupChatModalProps) {
       return;
     }
 
-    let nextUsers = [...users, cleanInput(search)];
+    const nextUsers = [...users, cleanInput(search)];
     setUsers(nextUsers);
     setSearch("");
     setError("");
