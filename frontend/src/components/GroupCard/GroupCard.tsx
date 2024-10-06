@@ -21,12 +21,17 @@ const eventCardData = [
   },
 ];
 
-export default function GroupCard() {
+interface GroupCardProps {
+  name: string;
+  id_: string;
+}
+
+export default function GroupCard(props: GroupCardProps) {
   return (
     <Paper withBorder={true} radius={"md"} shadow="sm" miw={"376px"} maw={"100%"} style={{flexGrow: 1}} p={"md"}>
       <Flex direction={"column"} w={"100%"} h={"100%"} gap={"lg"}>
         <Text size="lg" fw={500}>
-          Group Name
+          {props.name}
         </Text>
 
         <Flex direction={"row"} px={"md"} justify={"center"} gap={"lg"}>

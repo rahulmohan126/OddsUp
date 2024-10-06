@@ -29,6 +29,10 @@ const leaderboardData = [
   { id: '5', name: 'Casey', coins: 77, avatar: '/avatar5.png' },
 ];
 
+interface GroupProps {
+  id: string;
+}
+
 export default function Group() {
   return (
     <Layout>
