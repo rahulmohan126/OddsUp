@@ -1,6 +1,7 @@
 import express from "express";
-import bodyParser from "body-parser";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config()
 
 const app = express();
 
@@ -17,9 +18,9 @@ app.use(
 );
 
 app.options('*', cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use('/api/user', require('./routes/user'));
 app.use('/api/group', require('./routes/group'));
