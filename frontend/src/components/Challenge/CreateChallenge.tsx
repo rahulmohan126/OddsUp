@@ -1,4 +1,12 @@
-import { Modal, Text, Flex, Button, TextInput, NumberInput, ActionIcon } from "@mantine/core";
+import {
+  Modal,
+  Text,
+  Flex,
+  Button,
+  TextInput,
+  NumberInput,
+  ActionIcon,
+} from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useInputState } from "@mantine/hooks";
 import { useState } from "react";
@@ -8,7 +16,7 @@ import axios from "axios";
 interface CreateChallengeProps {
   opened: boolean;
   close: () => void;
-  groupId: number;
+  groupId: string;
 }
 
 interface Option {
@@ -24,6 +32,34 @@ export default function CreateChallenge(props: CreateChallengeProps) {
     { text: null, payout: 10 },
   ]);
 
+  const handleCreateChallenge = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const url = `${config.serverRootURL}/challenge/create`;
+    const body = {
+      groupId: props.groupId,
+      name: title,
+      odds: options.map((option) => ({
+        name: option.text,
+        payout: option.payout,
+      })),
+    };
+
+    try {
+      console.log(url, body)
+      const res = await axios.post(url, body);
+      console.log(res)
+      if (!res.data.success) {
+        console.log("Error!", res);
+        throw new Error("Challenge creation failed");
+      }
+      console.log("Successfully created challenge: " + title);
+      close();
+    } catch (error) {
+      console.error("Failed to create challenge:", error);
+    }
+  };
+
   const addOption = () => {
     setOptions([...options, { text: null, payout: 10 }]);
   };
@@ -34,7 +70,11 @@ export default function CreateChallenge(props: CreateChallengeProps) {
     }
   };
 
-  const updateOption = (index: number, field: 'text' | 'payout', value: string | number) => {
+  const updateOption = (
+    index: number,
+    field: "text" | "payout",
+    value: string | number
+  ) => {
     const newOptions = [...options];
     newOptions[index][field] = value as never;
     setOptions(newOptions);
@@ -64,8 +104,14 @@ export default function CreateChallenge(props: CreateChallengeProps) {
   };
 
   return (
-    <Modal opened={opened} onClose={close} title="Create Challenge" radius="lg" size="lg">
-      <form onSubmit={createChallenge}>
+    <Modal
+      opened={opened}
+      onClose={close}
+      title="Create Challenge"
+      radius="lg"
+      size="lg"
+    >
+      <form>
         <Flex direction="column" gap="md">
           <TextInput
             label="Challenge Title"
@@ -75,26 +121,34 @@ export default function CreateChallenge(props: CreateChallengeProps) {
             required
           />
 
-          <Text size="sm" mb={4}>Options</Text>
+          <Text size="sm" mb={4}>
+            Options
+          </Text>
           {options.map((option, index) => (
             <Flex key={index} gap="sm" align="flex-end">
               <TextInput
                 placeholder="Option text"
                 value={option.text}
-                onChange={(event) => updateOption(index, 'text', event.currentTarget.value)}
+                onChange={(event) =>
+                  updateOption(index, "text", event.currentTarget.value)
+                }
                 style={{ flex: 1 }}
                 required
               />
               <NumberInput
                 placeholder="Payout"
                 value={option.payout}
-                onChange={(value) => updateOption(index, 'payout', value || 10)}
+                onChange={(value) => updateOption(index, "payout", value || 10)}
                 min={10}
                 step={1}
-                style={{ width: '100px' }}
+                style={{ width: "100px" }}
                 required
               />
-              <ActionIcon color="red" onClick={() => removeOption(index)} disabled={options.length <= 2}>
+              <ActionIcon
+                color="red"
+                onClick={() => removeOption(index)}
+                disabled={options.length <= 2}
+              >
                 <IconTrash size="1rem" />
               </ActionIcon>
             </Flex>
@@ -109,7 +163,9 @@ export default function CreateChallenge(props: CreateChallengeProps) {
             Add Option
           </Button>
 
-          <Button type="submit" mt="md">Create Challenge</Button>
+          <Button type="submit" mt="md" onClick={handleCreateChallenge}>
+            Create Challenge
+          </Button>
         </Flex>
       </form>
     </Modal>

@@ -174,7 +174,7 @@ export default function Challenge() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <Group>
-                <Button variant="subtle" component={Link} to={"/group/" + fetchedChallengeData.groupId}>
+                <Button variant="subtle" component={Link} to={"/group/" + fetchedChallengeData.groupid}>
                   Back to Group
                 </Button>
                 <Button variant="light" component={Link} to="/create-challenge">

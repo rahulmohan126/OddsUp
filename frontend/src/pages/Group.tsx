@@ -230,7 +230,7 @@ export default function Group() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <CreateChallenge groupId={0} close={closeCreateGroupModal} opened={openedCreateGroupModal} />
+                      <CreateChallenge groupId={id_} close={closeCreateGroupModal} opened={openedCreateGroupModal} />
                       <Button onClick={openCreateGroupModal} size="lg" className="hover:shadow-lg transition-shadow duration-300" leftSection={<FaPlus />}>
                         Create New Challenge
                       </Button>
