@@ -8,17 +8,19 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
+import Group from "./pages/Group";
 
 function App() {
   return (
     <>
-      <MantineProvider>
+      <MantineProvider defaultColorScheme="dark">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/group" element={<Group />} />
             {/* Example of dynamic route */}
             {/* <Route path="/profile/:username/" element={<Profile />} /> */}
             {/* Example of default route */}

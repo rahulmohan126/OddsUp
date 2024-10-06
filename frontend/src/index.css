@@ -21,3 +21,19 @@
     background-size: 200% 200%;
   }
   
+
+  .bg {
+    background-color: transparent;
+    background: url('https://images.unsplash.com/photo-1655694775188-361234f2f5ed?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: auto;
+
+    filter: brightness(0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background-size: auto;
+
+    @apply flex h-screen pl-16 text-gray-50;
+}
