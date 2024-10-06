@@ -1,10 +1,10 @@
 import { supabase } from "../util/db";
 import { ChallengeBasic, Odds, Option, Selection } from "../util/models";
 
-export async function create(name: string): Promise<ChallengeBasic | null> {
+export async function create(name: string, groupId: string): Promise<ChallengeBasic | null> {
   const { data, error } = await supabase
     .from('challenge')
-    .insert({ name: name })
+    .insert({ name: name, groupid: groupId })
     .select();
 
   if (error) return null;
