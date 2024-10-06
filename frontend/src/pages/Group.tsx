@@ -80,6 +80,7 @@ export default function Group() {
   const { id_ } = useParams<string>();
 
   const [groupName, setGroupName] = useState<string>("");
+  const [challenges, setChallenges] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,6 +97,7 @@ export default function Group() {
 
         console.log("Group data: ", res.data.data);
         setGroupName(res.data.data.name);
+        setChallenges(res.data.data.challenges);
       } catch (error) {
         console.log(error)
       }
@@ -155,7 +157,7 @@ export default function Group() {
                       All Challenges
                     </h2>
                     <div className="grid gap-6 md:grid-cols-2">
-                      {groupData.challenges.map((challenge) => (
+                      {challenges.map((challenge) => (
                         <Link to={"/challenge"} key={challenge.id}>
                           <motion.div whileHover={{ scale: 1.02 }}>
                             <Card
@@ -170,9 +172,9 @@ export default function Group() {
                                   Active
                                 </Badge>
                               </div>
-                              <h3 className="text-lg">{challenge.question}</h3>
+                              <h3 className="text-lg">{challenge.name}</h3>
                               <div className="text-sm text-muted-foreground mt-2">
-                                Votes: {challenge.votes} <br />
+                                Completed: {challenge.winner ? "true" : "false"} <br />
                               </div>
                               <div className="flex flex-row items-end justify-end mt-4">
                                 <FaChevronRight />
