@@ -64,10 +64,34 @@ export default function Challenge() {
   const { id_ } = useParams();
   const [fetchedChallengeData, setFetchedChallengeData] = useState<any>([]);
 
-  const handleVote = (optionId: string) => {
-    if (!voted) {
-      setSelectedOption(optionId);
-      setVoted(true);
+  const handleVote = async (optionId: string) => {
+    if (voted) {
+      return;
+    }
+
+    setSelectedOption(optionId);
+    setVoted(true);
+
+    const url = `${config.serverRootURL}/challenge/makeSelection`;
+    const body = {
+      memberId: localStorage.getItem("user_id"),
+      challengeId: id_,
+      optionId: optionId,
+    };
+
+    try {
+      console.log(url, body);
+      const response = await axios.post(url, body);
+      console.log(response);
+
+      if (!response.data.success) {
+        console.log("Error: " + response);
+        throw new Error("Selection failed");
+      }
+
+      console.log("success selecting!");
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -136,37 +160,40 @@ export default function Challenge() {
               <Text size="xl" className="mb-4">
                 {fetchedChallengeData.name}
               </Text>
-              {fetchedChallengeData.options && fetchedChallengeData.options.map((option) => (
-                <motion.div
-                  key={option.id}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Card
-                    className={`mb-4 cursor-pointer ${
-                      selectedOption === option.id
-                        ? "bg-blue-100 text-black"
-                        : ""
-                    }`}
-                    onClick={() => handleVote(option.id)}
+              {fetchedChallengeData.options &&
+                fetchedChallengeData.options.map((option) => (
+                  <motion.div
+                    key={option.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <Group>
-                      <Text>{option.name}</Text>
+                    <Card
+                      className={`mb-4 cursor-pointer ${
+                        selectedOption === option.id
+                          ? "bg-blue-100 text-black"
+                          : ""
+                      }`}
+                      onClick={() => handleVote(option.id)}
+                    >
+                      <Group>
+                        <Text>{option.name}</Text>
+                        {voted && (
+                          <Badge color="gray">{option.votes} votes</Badge>
+                        )}
+                      </Group>
                       {voted && (
-                        <Badge color="gray">{option.votes} votes</Badge>
+                        <Progress
+                          value={
+                            (option.votes / challengeData.totalVotes) * 100
+                          }
+                          className="mt-2"
+                          color={selectedOption === option.id ? "blue" : "gray"}
+                          animated={false}
+                        />
                       )}
-                    </Group>
-                    {voted && (
-                      <Progress
-                        value={(option.votes / challengeData.totalVotes) * 100}
-                        className="mt-2"
-                        color={selectedOption === option.id ? "blue" : "gray"}
-                        animated={false}
-                      />
-                    )}
-                  </Card>
-                </motion.div>
-              ))}
+                    </Card>
+                  </motion.div>
+                ))}
             </Card>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -174,7 +201,11 @@ export default function Challenge() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <Group>
-                <Button variant="subtle" component={Link} to={"/group/" + fetchedChallengeData.groupid}>
+                <Button
+                  variant="subtle"
+                  component={Link}
+                  to={"/group/" + fetchedChallengeData.groupid}
+                >
                   Back to Group
                 </Button>
                 <Button variant="light" component={Link} to="/create-challenge">
