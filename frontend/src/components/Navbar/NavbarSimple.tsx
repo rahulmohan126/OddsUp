@@ -39,7 +39,7 @@ export function NavbarSimple() {
     <Box visibleFrom='sm'>
       <nav className={`${classes.navbar} h-lvh`}>
         <div className={`${classes.navbarMain}`}>
-          <h1 className="text-xl font-light mb-2 flex">oddsup<sup className='pt-2'><PiSparkleFill /></sup></h1>
+          <h1 className=" text-xl font-light mb-2 flex">oddsup<sup className='pt-2'><PiSparkleFill /></sup></h1>
           {links}
           <a
             className={`${classes.link} cursor-pointer`}
