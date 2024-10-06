@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Group from "./pages/Group";
+import Challenge from "./pages/Challenge";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/group" element={<Group />} />
+            <Route path="/challenge" element={<Challenge />} />
             {/* Example of dynamic route */}
             {/* <Route path="/profile/:username/" element={<Profile />} /> */}
             {/* Example of default route */}

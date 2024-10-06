@@ -1,8 +1,9 @@
 import Layout from "./Layout";
 import { Link } from 'react-router-dom';
-import { Card, Avatar, Button, Badge } from '@mantine/core';
+import { Card, Avatar, Button, Badge, Box } from '@mantine/core';
 import { motion } from 'framer-motion';
 import React from "react";
+import { FaChevronRight } from "react-icons/fa6";
 
 // Example group data (this would typically come from your API or database)
 const groupData = {
@@ -36,7 +37,7 @@ export default function Group() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 gap-4 mx-auto px-4 py-8">
 
           {/* Main Content */}
           <div className="col-span-2">
@@ -46,80 +47,90 @@ export default function Group() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-5xl font-bold">{groupData.name}</h2>
                 </div>
-                <Avatar size="lg" src="/placeholder.svg" alt="Group avatar" radius="xl">{groupData.name[0]}</Avatar>
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <Avatar size="xl" src="/placeholder.svg" alt="Group avatar" radius="xl">{groupData.name[0]}</Avatar>
+                  <div className="text-sm text-muted-foreground px-2 rounded-full w-fit py-1 font-semibold">{groupData.members} Members</div>
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">Members: {groupData.members}</div>
-              <Button variant="light" fullWidth className="w-fit mt-4 hover:opacity-95 transition-all duration-300 ease-in-out">
+              <Button variant="light" fullWidth className="w-fit hover:opacity-95 transition-all duration-300 ease-in-out">
                 Invite Friends
               </Button>
             </motion.div>
 
-            <h2 className="text-xl font-semibold mb-4">Challenges</h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {groupData.challenges.map((challenge) => (
-                <motion.div
-                  key={challenge.id}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <Card shadow="md" p="lg" radius="md" withBorder>
-                    <div className="mb-4">
-                      <Badge color="blue" variant="light">Active</Badge>
-                    </div>
-                    <h3 className="text-lg">{challenge.question}</h3>
-                    <div className="text-sm text-muted-foreground mt-2">
-                      Votes: {challenge.votes} <br />
-                      Ends on: {challenge.endDate}
-                    </div>
-                    {/* <div className="font-bold text-2xl p-3 bg-zinc-600 h w-fit rounded-full aspect-square flex flex-row items-center justify-center">
+            <div className="flex flex-row flex-wrap gap-10">
+              <div className="col-span-1">
+
+                <h2 className="text-2xl font-semibold mb-4">Challenges</h2>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {groupData.challenges.map((challenge) => (
+                    <Link to={'/challenge'}>
+                      <motion.div
+                        key={challenge.id}
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <Card shadow="md" p="lg" className="max-w-96" radius="md" withBorder>
+                          <div className="mb-4">
+                            <Badge color="blue" variant="light">Active</Badge>
+                          </div>
+                          <h3 className="text-lg">{challenge.question}</h3>
+                          <div className="text-sm text-muted-foreground mt-2">
+                            Votes: {challenge.votes} <br />
+                            Ends on: {challenge.endDate}
+                          </div>
+                          {/* <div className="font-bold text-2xl p-3 bg-zinc-600 h w-fit rounded-full aspect-square flex flex-row items-center justify-center">
                       {challenge.votes}
-                    </div> */}
-                    <div className="flex flex-rowitems-end justify-end mt-4">
-                      <Button variant="outline" color="gray">View Details</Button>
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              className="mt-8 text-center"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300">
-                Create New Challenge
-              </Button>
-            </motion.div>
-          </div>
-
-          {/* Leaderboard */}
-          <div className="col-span-1">
-            <h2 className="text-xl font-semibold mb-4">Leaderboard</h2>
-            <div className="space-y-4">
-              {leaderboardData.map((user, index) => (
+                      </div> */}
+                          <div className="flex flex-rowitems-end justify-end mt-4">
+                            <FaChevronRight />
+                          </div>
+                        </Card>
+                      </motion.div>
+                    </Link>
+                  ))}
+                </div>
                 <motion.div
-                  key={user.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.2, duration: 0.5 }}
+                  className="mt-8 text-center"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  <Card className="flex flex-row items-start">
-                    <Avatar src={user.avatar} alt={user.name} radius="xl" className="mr-4" size="lg" />
-                    <div>
-                      <h3 className="text-lg font-semibold">{user.name}</h3>
-                      <p className="text-sm text-muted-foreground">Coins: {user.coins}</p>
-                    </div>
-                    <Button className="ml-auto" variant="outline" color="gray">View Profile</Button>
-                  </Card>
+                  <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300">
+                    Create New Challenge
+                  </Button>
                 </motion.div>
-              ))}
+              </div>
+
+              {/* Leaderboard */}
+              <Box className="col-span-1">
+                <h2 className="text-2xl font-semibold mb-4 ">Leaderboard</h2>
+                <div className="space-y-4">
+                  {leaderboardData.map((user, index) => (
+                    <motion.div
+                      key={user.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: index * 0.2, duration: 0.5 }}
+                    >
+                      <Card className="flex flex-row items-start pr-32">
+                        <Avatar src={user.avatar} alt={user.name} radius="xl" className="mr-4" size="lg" />
+                        <div>
+                          <h3 className="text-lg font-semibold">{user.name}</h3>
+                          <p className="text-sm text-muted-foreground">Coins: {user.coins}</p>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              </Box>
             </div>
+
           </div>
+
+
         </div>
       </motion.div>
     </Layout>
