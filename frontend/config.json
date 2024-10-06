@@ -1,4 +1,4 @@
 {
-    "serverRootURL": "http://localhost:8080",
+    "serverRootURL": "http://localhost:3001",
     "appName" : "OddsUp"
 }
