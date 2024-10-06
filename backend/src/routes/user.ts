@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-
 import * as controller from "../controllers/user"
+
 const router = require('express').Router();
 
 router.post('/signup', async (req: Request, res: Response) => {
