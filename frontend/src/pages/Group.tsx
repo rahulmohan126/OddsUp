@@ -2,7 +2,7 @@ import Layout from "./Layout";
 import { Link } from "react-router-dom";
 import { Card, Button, Badge, Box, Tabs } from "@mantine/core";
 import { motion } from "framer-motion";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronRight, FaGem, FaPlus } from "react-icons/fa6";
 import Avatar, { genConfig } from "react-nice-avatar";
 import { useParams } from "react-router-dom";
@@ -79,10 +79,12 @@ interface GroupProps {
 export default function Group() {
   const { id_ } = useParams<string>();
 
+  const [groupName, setGroupName] = useState<string>("");
+
   useEffect(() => {
     const fetchData = async () => {
       const url = `${config.serverRootURL}/group/getInfo`;
-      const body = { groupInfo: id_ };
+      const body = { groupId: id_ };
 
       try {
         const res = await axios.post(url, body);
@@ -93,6 +95,7 @@ export default function Group() {
         }
 
         console.log("Group data: ", res.data.data);
+        setGroupName(res.data.data.name);
       } catch (error) {
         console.log(error)
       }
@@ -119,11 +122,11 @@ export default function Group() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-5xl font-bold">{groupData.name}</h2>
+                  <h2 className="text-5xl font-bold">{groupName}</h2>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                   <Card className="rounded-xl p-10 font-bold text-5xl">
-                    {groupData.name[0]}
+                    {groupName[0]}
                   </Card>
                   <div className="text-sm text-muted-foreground px-2 rounded-full w-fit py-1 font-semibold">
                     {groupData.members} Members
