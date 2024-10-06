@@ -1,11 +1,12 @@
 import { checkUsernameAvailable, createUser, getGroups, getInfo, loginUser, registerUser } from "../services/user";
 import { OUResponse, resError, resSuccess, User, UserWithToken } from "../util/models";
+import { LoginReq, SignInReq, GetUserReq } from "../util/reqBody";
 
 export async function temp() {
   return null;
 }
 
-export async function signUp(req: { email: string, username: string, password: string }): Promise<OUResponse> {
+export async function signUp(req: SignInReq): Promise<OUResponse> {
   const isAvailable = await checkUsernameAvailable(req.username);
   if (!isAvailable) {
     return resError("Username taken");
@@ -24,7 +25,7 @@ export async function signUp(req: { email: string, username: string, password: s
   return resSuccess({ id: res.userId, username: req.username, accessToken: res.accessToken } as UserWithToken);
 }
 
-export async function login(req: { email: string, password: string }): Promise<OUResponse> {
+export async function login(req: LoginReq): Promise<OUResponse> {
   const res = await loginUser(req.email, req.password);
   if (!res) {
     return resError("Incorrect email/password combo");
@@ -38,7 +39,7 @@ export async function login(req: { email: string, password: string }): Promise<O
   return resSuccess({ ...userInfo, accessToken: res.accessToken } as UserWithToken);
 }
 
-export async function getAllUserInfo(req: { userId: string }): Promise<OUResponse> {
+export async function getAllUserInfo(req: GetUserReq): Promise<OUResponse> {
   let info = await getInfo(req.userId);
   if (!info) {
     return resError("Failed to retrieve user info");

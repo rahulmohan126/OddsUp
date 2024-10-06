@@ -1,11 +1,12 @@
 import { addMembers, create, end, getChallenges, getIdFromCode, getInfo, getMembers } from "../services/group";
 import { Group, OUResponse, resError, resSuccess } from "../util/models";
+import { CreateGroupReq, GetGroupReq, JoinGroupReq } from "../util/reqBody";
 
 export async function temp() {
   return null;
 }
 
-export async function createGroup(req: { name: string, members: string[] }): Promise<OUResponse> {
+export async function createGroup(req: CreateGroupReq): Promise<OUResponse> {
   const groupInfo = await create(req.name);
   if (!groupInfo) {
     return resError("Couldn't create group");
@@ -19,7 +20,7 @@ export async function createGroup(req: { name: string, members: string[] }): Pro
   return resSuccess(groupInfo);
 }
 
-export async function joinFromCode(req: { userId: string, joinCode: string }): Promise<OUResponse> {
+export async function joinFromCode(req: JoinGroupReq): Promise<OUResponse> {
   const groupId = await getIdFromCode(req.joinCode);
   if (!groupId) {
     return resError("Couldn't find an open group with that join code");
@@ -38,7 +39,7 @@ export async function joinFromCode(req: { userId: string, joinCode: string }): P
   return resSuccess(groupInfo);
 }
 
-export async function getAllGroupInfo(req: { groupId: string }): Promise<OUResponse> {
+export async function getAllGroupInfo(req: GetGroupReq): Promise<OUResponse> {
   const groupInfo = await getInfo(req.groupId);
   if (!groupInfo) {
     return resError("Couldn't retrieve group info");
@@ -57,7 +58,7 @@ export async function getAllGroupInfo(req: { groupId: string }): Promise<OURespo
   return resSuccess({ ...groupInfo, challenges, members } as Group);
 }
 
-export async function endGroup(req: { groupId: string }): Promise<OUResponse> {
+export async function endGroup(req: GetGroupReq): Promise<OUResponse> {
   const success = await end(req.groupId);
   if (!success) {
     return resError("Couldn't end group");
