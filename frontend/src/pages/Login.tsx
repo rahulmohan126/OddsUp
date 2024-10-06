@@ -20,14 +20,14 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import supabase  from "../supabase/supabaseClient";
-import { useIsAuthenticated } from "../supabase/useIsAuthenticated";
+import { useIsAuthenticatedNoReRoute } from "../supabase/useIsAuthenticated";
 
 axios.defaults.withCredentials = true;
 
 export default function Login() {
   const navigate = useNavigate();
   // const { isAuthenticated } = useAuthentication();
-  const isAuthenticated  = useIsAuthenticated();
+  const isAuthenticated  = useIsAuthenticatedNoReRoute();
 
   // TODO: set appropriate state variables for username and password
   const [email, setEmail] = useInputState("");

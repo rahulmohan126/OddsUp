@@ -23,13 +23,15 @@ import axios from "axios";
 import config from "../../config.json";
 import supabase  from "../supabase/supabaseClient";
 
+import { useIsAuthenticatedNoReRoute } from "../supabase/useIsAuthenticated";
+
 axios.defaults.withCredentials = true;
 
 export default function Signup() {
   const navigate = useNavigate();
   // const { isAuthenticated } = useAuthentication();
 
-  const isAuthenticated = false;
+  const isAuthenticated = useIsAuthenticated();
 
   const [username, setUsername] = useInputState("");
   const [password, setPassword] = useInputState("");
