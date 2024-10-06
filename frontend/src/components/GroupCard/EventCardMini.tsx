@@ -1,10 +1,10 @@
-import { Paper, Flex, Text, Avatar, Box } from "@mantine/core";
+import { Paper, Flex, Text, Avatar } from "@mantine/core";
 import { useState } from "react";
 
 interface EventCardMiniProps {
-    eventName: string;
-    vote: string;
-    voteReward: number;
+  eventName: string;
+  vote: string;
+  voteReward: number;
 }
 
 export default function EventCardMini(props: EventCardMiniProps) {
@@ -26,7 +26,7 @@ export default function EventCardMini(props: EventCardMiniProps) {
       h={"148px"}
       p={"sm"}
       withBorder={true}
-      style={{ borderColor: "gray.4"}}
+      style={{ borderColor: "gray.4" }}
       shadow="none"
       radius={"lg"}
     >
