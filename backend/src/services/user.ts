@@ -4,13 +4,9 @@ import { GroupBasic, User, UserBasic } from "../util/models";
 export async function registerUser(email: string, password: string): Promise<string | null> {
   const { data, error } = await supabase.auth.signUp({ email, password });
 
-  console.log(data);
-  console.log(error);
-
   if (error || !data.user) return null;
 
   return data.user.id;
-
 }
 
 export async function checkUsernameAvailable(username: string): Promise<boolean> {
@@ -19,9 +15,6 @@ export async function checkUsernameAvailable(username: string): Promise<boolean>
     .select('*')
     .eq('username', username)
     .limit(1);
-  
-  console.log(data);
-  console.log(error);
 
   if (error) return false;
 
@@ -61,9 +54,9 @@ export async function getGroups(userId: string): Promise<GroupBasic[] | null> {
   const { data, error } = await supabase
     .from('member')
     .select('usergroup(id, name, ended)')
-    .eq('userId', userId);
+    .eq('userid', userId);
 
   if (error) return null;
 
-  return data.map(x => x.usergroup[0]) as GroupBasic[];
+  return data.map(x => x.usergroup as unknown as GroupBasic) as GroupBasic[];
 }

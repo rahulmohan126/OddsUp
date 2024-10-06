@@ -45,7 +45,7 @@ export async function getSelections(challengeId: string): Promise<Selection[] | 
   const { data, error } = await supabase
     .from('selection')
     .select()
-    .eq('challengeId', challengeId);
+    .eq('challengeid', challengeId);
 
   if (error) return null;
 
@@ -56,7 +56,7 @@ export async function getOptions(challengeId: string): Promise<Option[] | null> 
   const { data, error } = await supabase
     .from('oddsoption')
     .select()
-    .eq('challengeId', challengeId);
+    .eq('challengeid', challengeId);
 
   if (error) return null;
 

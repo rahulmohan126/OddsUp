@@ -11,15 +11,15 @@ export type UserBasic = {
 }
 
 export type Member = {
-  userId: string
-  groupId: string
+  userid: string
+  groupid: string
   points: number
 }
 
 export type Group = {
   id: string
   name: string
-  joinCode: string,
+  joincode: string,
   members: Member[]
   challenges: ChallengeBasic[]
   ended: boolean
@@ -28,12 +28,13 @@ export type Group = {
 export type GroupBasic = {
   id: string
   name: string
-  joinCode: string,
+  joincode: string,
   ended: boolean
 }
 
 export type Challenge = {
   id: string
+  groupid: string
   name: string
   completed: boolean
   winner: null | string
@@ -44,6 +45,7 @@ export type Challenge = {
 
 export type ChallengeBasic = {
   id: string
+  groupid: string
   name: string
   completed: boolean
   winner: null | string
@@ -51,16 +53,16 @@ export type ChallengeBasic = {
 
 
 export type Option = {
-  optionId: string
-  challengeId: string
+  optionid: string
+  challengeid: string
   name: string
   payout: number
 }
 
 export type Selection = {
-  memberId: string
-  challengeId: string
-  optionId: string
+  memberid: string
+  challengeid: string
+  optionid: string
 }
 
 export type Odds = {

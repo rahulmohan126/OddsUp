@@ -1,12 +1,18 @@
 import { supabase } from "../util/db";
-import { ChallengeBasic, GroupBasic } from "../util/models";
+import { ChallengeBasic, GroupBasic, Member } from "../util/models";
+
+function generateJoinCode(): string {
+  var code = (Math.random()+0.1).toString(36).slice(2,8);
+  if (code.length < 6) code = code.repeat(6).slice(0,6);
+  return code.toUpperCase();
+}
 
 export async function getInfo(groupId: string): Promise<GroupBasic | null> {
   const { data, error } = await supabase
     .from('usergroup')
-    .select('id, name, joinCode, ended')
-    .is('groupId', groupId);
-
+    .select('id, name, joincode, ended')
+    .eq('id', groupId);
+  
   if (error) return null;
 
   return data[0] as GroupBasic;
@@ -15,41 +21,64 @@ export async function getInfo(groupId: string): Promise<GroupBasic | null> {
 export async function getChallenges(groupId: string): Promise<ChallengeBasic[] | null> {
   const { data, error } = await supabase
     .from('challenge')
-    .select('id, name, completed, winner')
-    .is('groupId', groupId);
+    .select()
+    .eq('groupid', groupId);
 
   if (error) return null;
 
   return data as ChallengeBasic[];
 }
 
-export async function create(name: string, members: string[]): Promise<string | null> {
+export async function getMembers(groupId: string): Promise<Member[] | null> {
   const { data, error } = await supabase
-    .from('usergroup')
-    .insert({ name: name })
-    .select('id');
+    .from('member')
+    .select()
+    .eq('groupid', groupId);
 
   if (error) return null;
 
-  return data[0].id;
+  return data as Member[];
 }
 
-export async function addMembers(groupId: string, members: string[]): Promise<number> {
+export async function create(name: string): Promise<GroupBasic | null> {
+  const { data, error } = await supabase
+    .from('usergroup')
+    .insert({ name: name, joincode: generateJoinCode() })
+    .select();
+  
+  if (error) return null;
+
+  return data[0] as GroupBasic;
+}
+
+export async function addMembers(groupId: string, members: string[]): Promise<boolean> {
   const memberInsertions = members.map(userId => {
     return {
-      userId: userId,
-      groupId: groupId,
+      userid: userId,
+      groupid: groupId,
       points: 0
     }
   });
 
   const { error } = await supabase
-    .from('usergroup')
+    .from('member')
     .insert(memberInsertions);
+  
+  if (error) return false;
 
-  if (error) return 1;
+  return true;
+}
 
-  return 0;
+export async function getIdFromCode(joinCode: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from('usergroup')
+    .select('id')
+    .ilike('joincode', `%${joinCode}%`)
+    .eq('ended', false);
+
+  if (error || data.length === 0) return null;
+
+  return data[0].id;
 }
 
 export async function end(groupId: string): Promise<number> {
