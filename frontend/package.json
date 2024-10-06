@@ -14,6 +14,7 @@
     "@mantine/form": "^7.13.2",
     "@mantine/hooks": "^7.13.2",
     "@mantine/modals": "^7.13.2",
+    "@supabase/supabase-js": "^2.45.4",
     "@tabler/icons-react": "^3.19.0",
     "@tiptap/extension-link": "^2.8.0",
     "@tiptap/pm": "^2.8.0",
