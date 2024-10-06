@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@mantine/core';
 import {
   IconHome,
@@ -12,6 +12,10 @@ import { IoMdAdd } from "react-icons/io";
 import { IoCreate } from "react-icons/io5";
 import { useGroupModalContext } from '../GroupChatModals/GroupModalContext';
 
+import logout from '../../helpers/logout';
+import useIsAuthenticated from '../../hooks/useIsAuthenticated';
+import { useNavigate } from 'react-router-dom';
+
 const data = [
   { link: '/home', label: 'Home', icon: IconHome },
 ];
@@ -19,6 +23,8 @@ const data = [
 export function NavbarSimple() {
   const [active, setActive] = useState('Home');
   const { openCreateGroupModal, openJoinGroupModal } = useGroupModalContext();
+  const navigate = useNavigate();
+  const isAuthenticated = useIsAuthenticated();
 
   const links = data.map((item) => (
     <Link
@@ -64,7 +70,7 @@ export function NavbarSimple() {
 
         </div>
 
-        <div className={classes.footer}>
+        <div className={classes.footer} onClick={logout}>
           <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
             <IconLogout className={classes.linkIcon} stroke={1.5} />
             <span>Logout</span>

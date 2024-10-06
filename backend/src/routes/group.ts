@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-
 import * as controller from "../controllers/group"
+
 const router = require('express').Router();
 
 router.post('/create', async (req: Request, res: Response) => {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-
 import * as controller from "../controllers/user"
+
 const router = require('express').Router();
 
 router.post('/signup', async (req: Request, res: Response) => {
@@ -13,6 +13,10 @@ router.post('/login', async (req: Request, res: Response) => {
 
 router.post('/getInfo', async (req: Request, res: Response) => {
   res.json(await controller.getAllUserInfo(req.body));
+});
+
+router.post('/getBasic', async (req: Request, res: Response) => {
+  res.json(await controller.getBasicUserInfo(req.body));
 });
 
 module.exports = router;

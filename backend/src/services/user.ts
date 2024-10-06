@@ -1,12 +1,12 @@
 import { supabase } from "../util/db";
 import { GroupBasic, User, UserBasic } from "../util/models";
 
-export async function registerUser(email: string, password: string): Promise<{ userId: string, accessToken: string } | null> {
+export async function registerUser(email: string, password: string): Promise<{ userId: string } | null> {
   const { data, error } = await supabase.auth.signUp({ email, password });
 
-  if (error || !data.user || !data.session) return null;
+  if (error || !data.user) return null;
 
-  return { userId: data.user.id, accessToken: data.session.access_token};
+  return { userId: data.user.id };
 }
 
 export async function checkUsernameAvailable(username: string): Promise<boolean> {
@@ -31,15 +31,15 @@ export async function createUser(userId: string, username: string): Promise<bool
   return true;
 }
 
-export async function loginUser(email: string, password: string): Promise<{ userId: string, accessToken: string } | null> {
+export async function loginUser(email: string, password: string): Promise<{ userId: string } | null> {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error || !data.user) return null;
 
-  return { userId: data.user.id, accessToken: data.session.access_token };
+  return { userId: data.user.id };
 }
 
-export async function getInfo(userId: string): Promise<UserBasic|null> {
+export async function getInfo(userId: string): Promise<UserBasic | null> {
   const { data, error } = await supabase
     .from('oddsupuser')
     .select()

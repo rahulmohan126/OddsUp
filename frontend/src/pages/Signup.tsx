@@ -17,20 +17,24 @@ import { PasswordStrength } from "../components/PasswordStrength";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 //   import useAuthentication from "../hooks/useAuthentication";
 
 import axios from "axios";
 import config from "../../config.json";
 import { PiSparkleFill } from "react-icons/pi";
 import Spline from "@splinetool/react-spline";
+import useIsAuthenticated from "../hooks/useIsAuthenticated";
 
 axios.defaults.withCredentials = true;
 
 export default function Signup() {
   const navigate = useNavigate();
-  // const { isAuthenticated } = useAuthentication();
+  const isAuthenticated = useIsAuthenticated();
 
-  const isAuthenticated = false;
+  if (isAuthenticated) {
+    navigate("/home");
+  }
 
   const [username, setUsername] = useInputState("");
   const [password, setPassword] = useInputState("");
@@ -71,7 +75,8 @@ export default function Signup() {
       return;
     }
 
-    const url = `${rootURL}/register`;
+
+    const url = `${rootURL}/user/signup`;
     const body = {
       username: username,
       password: password,
@@ -81,11 +86,13 @@ export default function Signup() {
     try {
       const response = await axios.post(url, body);
 
-      if (!response || response.status != 200) {
-        console.log("Error with status: " + response.status);
+      if (!response.data.success) {
+        console.log("Error: " + response);
         throw new Error("Response is null");
       }
 
+      localStorage.setItem("user_id", response.data.data.id);
+      localStorage.setItem("username", response.data.data.username);
       console.log("success!");
       navigate("/home");
     } catch (error: any) {
@@ -110,8 +117,7 @@ export default function Signup() {
   return (
     <Flex align={"center"} justify={"center"} h={"100vh"}>
       <Container size={420} my={40}>
-        <Title ta="center" className="flex flex-row items-center justify-center gap-2">Welcome to <a className="text-4xl font-light flex">oddsup<sup className='pt-2'><PiSparkleFill /></sup></a>
-        </Title>
+        <Title ta="center">Welcome to {config.appName}</Title>
         <Text c="dimmed" size="sm" ta="center" mt={5}>
           Already have an account?{" "}
           <Anchor

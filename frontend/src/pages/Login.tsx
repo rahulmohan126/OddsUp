@@ -21,12 +21,18 @@ import { useEffect, useState } from "react";
 import { PiSparkleFill } from "react-icons/pi";
 import Spline from "@splinetool/react-spline";
 
+import  useIsAuthenticated  from "../hooks/useIsAuthenticated";
+
 axios.defaults.withCredentials = true;
 
 export default function Login() {
   const navigate = useNavigate();
   // const { isAuthenticated } = useAuthentication();
-  const isAuthenticated = false;
+  const isAuthenticated = useIsAuthenticated();
+
+  if (isAuthenticated) {
+    navigate("/home");
+  };
 
   // TODO: set appropriate state variables for username and password
   const [username, setUsername] = useInputState("");
@@ -46,10 +52,10 @@ export default function Login() {
     // TODO: check username and password using /login route
     event.preventDefault();
 
-    const url = `${rootURL}/login`;
+    const url = `${rootURL}/user/login`;
 
     const body = {
-      username: username,
+      email: username,
       password: password,
     };
 
@@ -58,25 +64,17 @@ export default function Login() {
     try {
       const response = await axios.post(url, body);
 
-      if (!response || response.status != 200) {
-        console.log("Error with status: " + response.status);
-        throw new Error("Response is null");
+      if (!response.data.success) {
+        console.log("Error!", response);
+        throw new Error("Login failed");
       }
 
+      localStorage.setItem("user_id", response.data.data.id);
+      localStorage.setItem("username", response.data.data.username);
       console.log("Successfully logged in as: " + username);
       navigate(`/home`);
     } catch (error: any) {
-      if (error.response.status == 400) {
-        setError("Invalid formatting!");
-        setUsername("");
-        setPassword("");
-      } else if (error.response.status == 401) {
-        setError("Invalid credentials!");
-        setPassword("");
-      } else {
-        alert("An internal error occurred");
-      }
-
+      setError("Error occurred");
       console.log("Login failed failed (axios error)");
     }
   };
@@ -84,7 +82,17 @@ export default function Login() {
   return (
     <Flex align={"center"} justify={"center"} h={"100vh"}>
       <Container size={420} my={40}>
-        <Title ta="center" className="flex flex-row items-center justify-center gap-2">Welcome to <a className="text-4xl font-light flex">oddsup<sup className='pt-2'><PiSparkleFill /></sup></a>
+        <Title
+          ta="center"
+          className="flex flex-row items-center justify-center"
+        >
+          Welcome to{" "}
+          <a className="text-xl font-light flex">
+            oddsup
+            <sup className="pt-2">
+              <PiSparkleFill />
+            </sup>
+          </a>
         </Title>
         <Text c="dimmed" size="sm" ta="center" mt={5}>
           Do not have an account yet?{" "}
@@ -103,8 +111,8 @@ export default function Login() {
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <Stack gap={"16px"}>
             <TextInput
-              label="Username"
-              placeholder="johndoe1"
+              label="Email"
+              placeholder="johndoe@gmail.com"
               value={username}
               onChange={setUsername}
               required

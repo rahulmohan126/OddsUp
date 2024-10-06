@@ -14,6 +14,8 @@ import {
 
 import { useInputState } from "@mantine/hooks";
 import { useState, useEffect } from "react";
+import config from "../../../config.json";
+import axios from "axios";
 
 function cleanInput(str: string) {
   // Remove non-alphanumeric characters and spaces using a regular expression
@@ -35,6 +37,7 @@ export default function CreateGroupChatModal(props: CreateGroupChatModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [users, setUsers] = useState<string[]>([]);
+  const [groupName, setGroupName] = useState<string>("");
 
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -64,12 +67,40 @@ export default function CreateGroupChatModal(props: CreateGroupChatModalProps) {
     setUsers(users.filter((user) => user !== username));
   };
 
+  const createGroup = async (event: any) => {
+    event.preventDefault();
+
+    console.log("triggered")
+    
+    const url = `${config.serverRootURL}/group/create`;
+    const body = {
+      name: groupName,
+      members: [],
+    };
+    const res = await axios.post(url, body);
+
+    if (!res.data.success) {
+      console.log("Error!", res);
+      throw new Error("Group creation failed");
+    }
+
+    console.log("Successfully created group: " + groupName);
+    close();
+  };
+
   return (
     <>
       <Modal opened={opened} onClose={close} title="Create Group" radius={"lg"}>
         <Flex align={"start"} gap={"md"} direction={"column"}>
           <Text fw={300}>Group Name</Text>
-          <Input placeholder="My Group" w={"100%"} />
+          <Input
+            placeholder="My Group"
+            value={groupName}
+            onChange={(e) => {
+              setGroupName(e.currentTarget.value);
+            }}
+            w={"100%"}
+          />
           <Text fw={300}>Add Members</Text>
 
           <Flex direction={"column"} gap={"sm"} justify={"center"} w={"100%"}>
@@ -115,7 +146,11 @@ export default function CreateGroupChatModal(props: CreateGroupChatModalProps) {
             />
           </Flex>
           <Flex direction={"row"} w={"100%"} justify={"end"} gap={"md"}>
-            <Button variant="light" rightSection={<IconArrowRight size={14} />}>
+            <Button
+              variant="light"
+              rightSection={<IconArrowRight size={14} />}
+              onClick={createGroup}
+            >
               Create
             </Button>
           </Flex>
