@@ -1,8 +1,9 @@
 import Layout from "./Layout";
 import { Link } from 'react-router-dom';
-import { Card, Avatar, Button, Badge, Box, Text, Group, Progress } from '@mantine/core';
+import { Card, Button, Badge, Box, Text, Group, Progress } from '@mantine/core';
 import { motion } from 'framer-motion';
 import React, { useState } from "react";
+import Avatar, { genConfig } from 'react-nice-avatar'
 
 const challengeData = {
   id: '1',
@@ -42,7 +43,7 @@ export default function Challenge() {
           <Card shadow="sm" padding="lg" radius="md" withBorder className="mb-8">
             <Group className="mb-4">
               <Group>
-                <Avatar src={challengeData.creator.avatar} radius="xl" />
+                <Avatar className="w-12 h-12" {...genConfig(challengeData.creator.name)} />
                 <div>
                   <Text size="sm">{challengeData.creator.name}</Text>
                   <Text size="xs" color="dimmed">Challenge Creator</Text>

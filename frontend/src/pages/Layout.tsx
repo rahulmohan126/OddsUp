@@ -17,7 +17,7 @@ export default function Layout(props: LayoutProps) {
           <NavbarSimple />
           <Flex direction={"column"} w={"100%"} gap={0}>
             {/* <HeaderMenu /> */}
-            <Flex>{props.children}</Flex>
+            <Flex p={"md"}>{props.children}</Flex>
           </Flex>
         </Flex>
       </GroupModalProvider>
