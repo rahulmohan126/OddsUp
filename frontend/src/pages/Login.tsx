@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { PiSparkleFill } from "react-icons/pi";
 import Spline from "@splinetool/react-spline";
 
-import  useIsAuthenticated  from "../hooks/useIsAuthenticated";
+import useIsAuthenticated from "../hooks/useIsAuthenticated";
 
 axios.defaults.withCredentials = true;
 
@@ -87,7 +87,7 @@ export default function Login() {
           className="flex flex-row items-center justify-center"
         >
           Welcome to{" "}
-          <a className="text-xl font-light flex">
+          <a className="text-3xl ml-2 font-light flex">
             oddsup
             <sup className="pt-2">
               <PiSparkleFill />

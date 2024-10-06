@@ -3,6 +3,7 @@ import { Paper, Flex, Text } from "@mantine/core";
 import LeaderboardPositionProgressBar from "./LeaderboardPositionProgressBar";
 import EventCardMini from "./EventCardMini";
 import { useNavigate } from "react-router-dom";
+import { FaChevronRight } from "react-icons/fa6";
 
 const eventCardData = [
   {
@@ -47,9 +48,12 @@ export default function GroupCard(props: GroupCardProps) {
       onClick={clickCard}
     >
       <Flex direction={"column"} w={"100%"} h={"100%"} gap={"lg"}>
-        <Text size="lg" fw={500}>
-          {props.name}
-        </Text>
+        <div className="flex flex-row items-end justify-between">
+          <Text size="lg" fw={500}>
+            {props.name}
+          </Text>
+          <FaChevronRight />
+        </div>
 
         <Flex direction={"row"} px={"md"} justify={"center"} gap={"lg"}>
           {eventCardData.map((eventCardData, index) => {

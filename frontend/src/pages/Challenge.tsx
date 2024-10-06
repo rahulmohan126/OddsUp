@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import config from "../../config.json";
 import axios from "axios";
+import { Challenge as ChallengeType } from "../utils/models";
 
 const challengeData = {
   id: "1",
@@ -62,7 +63,7 @@ export default function Challenge() {
   const [voted, setVoted] = useState(false);
   const [selectedOption, setSelectedOption] = useState("0");
   const { id_ } = useParams();
-  const [fetchedChallengeData, setFetchedChallengeData] = useState<any>([]);
+  const [fetchedChallengeData, setFetchedChallengeData] = useState<ChallengeType>();
 
   const handleVote = async (optionId: string) => {
     if (voted) {
@@ -115,7 +116,11 @@ export default function Challenge() {
     };
 
     fetchData();
-  }, []);
+  }, [id_]);
+
+  if (fetchedChallengeData === undefined) {
+    return <div/>
+  }
 
   return (
     <Layout>
@@ -168,24 +173,21 @@ export default function Challenge() {
                     whileTap={{ scale: 0.98 }}
                   >
                     <Card
-                      className={`mb-4 cursor-pointer ${
-                        selectedOption === option.id
-                          ? "bg-blue-100 text-black"
-                          : ""
-                      }`}
+                      className={`mb-4 cursor-pointer ${selectedOption === option.id
+                        ? "bg-blue-100 text-black"
+                        : ""
+                        }`}
                       onClick={() => handleVote(option.id)}
                     >
                       <Group>
                         <Text>{option.name}</Text>
                         {voted && (
-                          <Badge color="gray">{option.votes} votes</Badge>
+                          <Badge color="gray">0 votes</Badge>
                         )}
                       </Group>
                       {voted && (
                         <Progress
-                          value={
-                            (option.votes / challengeData.totalVotes) * 100
-                          }
+                          value={0}
                           className="mt-2"
                           color={selectedOption === option.id ? "blue" : "gray"}
                           animated={false}
@@ -227,22 +229,22 @@ export default function Challenge() {
                   Individual Votes
                 </Text>
                 <ScrollArea style={{ height: 400 }}>
-                  {challengeData.options.map((option) => (
+                  {fetchedChallengeData.options.map((option) => (
                     <div key={option.id} className="mb-4">
                       <Text size="sm" className="mb-2 font-medium">
-                        {option.text}
+                        {option.name}
                       </Text>
                       <Group>
-                        {option.voters.map((voter, index) => (
-                          <Tooltip key={index} label={voter} withArrow>
+                        {fetchedChallengeData.selections.map((selection, idx) => (selection.optionid === option.id) ? (
+                          <Tooltip key={idx} label={`User ${idx + 1}`} withArrow>
                             <div>
                               <Avatar
                                 className="w-8 h-8"
-                                {...genConfig(voter)}
+                                {...genConfig(selection.memberid)}
                               />
                             </div>
                           </Tooltip>
-                        ))}
+                        ) : <div/>)}
                       </Group>
                     </div>
                   ))}
