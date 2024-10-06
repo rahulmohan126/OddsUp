@@ -10,26 +10,53 @@ export const useIsAuthenticated = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get the current session
-    const session = supabase.auth.session();
+    let isMounted = true; // To prevent state updates on unmounted components
 
-    setIsAuthenticated(!!session);
+    // Define an async function to get the current session
+    const getSession = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error("Error getting session:", error.message);
+      }
+
+      if (isMounted) {
+        setIsAuthenticated(!!session);
+
+        if (!session) {
+          console.log("Defaulting route")
+          navigate("/");
+        } else {
+          console.log("Authorized!")
+        }
+      }
+    };
+
+    // Call the async function
+    getSession();
 
     // Listen for changes to the auth state
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event: any, session: any) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      if (isMounted) {
         setIsAuthenticated(!!session);
+
         if (!session) {
           navigate("/");
         }
       }
-    );
+    });
 
     // Cleanup the listener on unmount
     return () => {
-      authListener?.unsubscribe();
+      isMounted = false;
+      subscription.unsubscribe();
     };
-  }, []);
+  }, [navigate]);
 
   return isAuthenticated;
 };

@@ -70,7 +70,7 @@ export default function Signup() {
       return;
     }
 
-    const url = `${rootURL}/signup`;
+    const url = `${rootURL}/user/signup`;
     const body = {
       username: username,
       password: password,
@@ -81,7 +81,9 @@ export default function Signup() {
       const response = await axios.post(url, body);
       const result = response.data;
 
-      if (!result.success) {
+      console.log(response)
+
+      if (!response.data.success) {
         console.log("Error with status: " + response.status);
         throw new Error("Response is null");
       }

@@ -19,15 +19,18 @@ import config from "../../config.json";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import supabase  from "../supabase/supabaseClient";
+import { useIsAuthenticated } from "../supabase/useIsAuthenticated";
+
 axios.defaults.withCredentials = true;
 
 export default function Login() {
   const navigate = useNavigate();
   // const { isAuthenticated } = useAuthentication();
-  const isAuthenticated = false;
+  const isAuthenticated  = useIsAuthenticated();
 
   // TODO: set appropriate state variables for username and password
-  const [username, setUsername] = useInputState("");
+  const [email, setEmail] = useInputState("");
   const [password, setPassword] = useInputState("");
 
   const [error, setError] = useState("");
@@ -44,39 +47,52 @@ export default function Login() {
     // TODO: check username and password using /login route
     event.preventDefault();
 
-    const url = `${rootURL}/login`;
-
-    const body = {
-      username: username,
-      password: password,
-    };
-
-    console.log("Attempting login...");
-
-    try {
-      const response = await axios.post(url, body);
-
-      if (!response || response.status != 200) {
-        console.log("Error with status: " + response.status);
-        throw new Error("Response is null");
-      }
-
-      console.log("Successfully logged in as: " + username);
-      navigate(`/home`);
-    } catch (error: any) {
-      if (error.response.status == 400) {
-        setError("Invalid formatting!");
-        setUsername("");
-        setPassword("");
-      } else if (error.response.status == 401) {
-        setError("Invalid credentials!");
-        setPassword("");
-      } else {
-        alert("An internal error occurred");
-      }
-
-      console.log("Login failed failed (axios error)");
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+  
+    if (error) {
+      console.error('Login error:', error.message);
+      setError(error.message);
+      return;
     }
+  
+    // Successful login, navigate to home
+    console.log('Successfully logged in as:', data.user.email);
+    navigate('/home');
+
+    // const url = `${rootURL}/user/login`;
+
+    // const body = {
+    //   email: email,
+    //   password: password,
+    // };
+
+    // console.log("Attempting login...");
+
+    // try {
+    //   const response = await axios.post(url, body);
+
+    //   if (!response.data.success) {
+    //     console.log("Error with status: " + response.status);
+    //     console.log(response)
+    //     throw new Error("Response is null");
+    //   }
+
+    //   const { accessToken } = response.data
+    //   if (accessToken) {
+    //     await supabase.auth.setSession({ access_token: accessToken, refresh_token: '' });
+    //     console.log("Set session token!")
+    //   }
+
+    //   console.log("Successfully logged in as: " + email);
+    //   console.log(response.data);
+    //   navigate(`/home`);
+    // } catch (error: any) {
+    //   console.log(error)
+    //   console.log("Login failed failed (axios error)");
+    // }
   };
 
   return (
@@ -100,10 +116,10 @@ export default function Login() {
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <Stack gap={"16px"}>
             <TextInput
-              label="Username"
-              placeholder="johndoe1"
-              value={username}
-              onChange={setUsername}
+              label="Email"
+              placeholder="johndoe@gmail.com"
+              value={email}
+              onChange={setEmail}
               required
               error={error}
             />
