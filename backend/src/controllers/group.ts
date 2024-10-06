@@ -2,10 +2,6 @@ import { addMembers, create, end, getChallenges, getIdFromCode, getInfo, getMemb
 import { Group, OUResponse, resError, resSuccess } from "../util/models";
 import { CreateGroupReq, GetGroupReq, JoinGroupReq } from "../util/reqBody";
 
-export async function temp() {
-  return null;
-}
-
 export async function createGroup(req: CreateGroupReq): Promise<OUResponse> {
   const groupInfo = await create(req.name);
   if (!groupInfo) {

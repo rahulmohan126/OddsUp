@@ -2,10 +2,6 @@ import { checkUsernameAvailable, createUser, getGroups, getInfo, loginUser, regi
 import { OUResponse, resError, resSuccess, User, UserWithToken } from "../util/models";
 import { LoginReq, SignInReq, GetUserReq } from "../util/reqBody";
 
-export async function temp() {
-  return null;
-}
-
 export async function signUp(req: SignInReq): Promise<OUResponse> {
   const isAvailable = await checkUsernameAvailable(req.username);
   if (!isAvailable) {

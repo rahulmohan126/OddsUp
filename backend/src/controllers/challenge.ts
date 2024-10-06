@@ -2,10 +2,6 @@ import { addOptions, create, getInfo, getOptions, getSelections, givePayout, sel
 import { Challenge, Option, OUResponse, resError, resSuccess } from "../util/models";
 import { CreateChallengeReq, GetChallengeReq, MakeSelectionReq, PayoutReq } from "../util/reqBody";
 
-export async function temp() {
-  return null;
-}
-
 export async function createChallenge(req: CreateChallengeReq): Promise<OUResponse> {
   const challengeInfo = await create(req.name);
   if (!challengeInfo) {
