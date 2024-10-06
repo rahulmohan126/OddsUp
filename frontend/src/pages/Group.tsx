@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import React from "react";
 import { FaChevronRight, FaGem, FaPlus } from "react-icons/fa6";
 import Avatar, { genConfig } from 'react-nice-avatar'
+import { useDisclosure } from "@mantine/hooks";
+import CreateChallenge from "../components/Challenge/CreateChallenge";
 
 // Example group data (this would typically come from your API or database)
 const groupData = {
@@ -36,6 +38,11 @@ const myChallenges = [
 ];
 
 export default function Group() {
+  const [
+    openedCreateGroupModal,
+    { open: openCreateGroupModal, close: closeCreateGroupModal },
+  ] = useDisclosure(false);
+
   return (
     <Layout>
       <motion.div
@@ -132,7 +139,8 @@ export default function Group() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300" leftSection={<FaPlus />}>
+                      <CreateChallenge groupId={0} close={closeCreateGroupModal} opened={openedCreateGroupModal} />
+                      <Button onClick={openCreateGroupModal} size="lg" className="hover:shadow-lg transition-shadow duration-300" leftSection={<FaPlus />}>
                         Create New Challenge
                       </Button>
                     </motion.div>
