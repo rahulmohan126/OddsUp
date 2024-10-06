@@ -53,7 +53,7 @@ export default function Group() {
                 <Avatar size="lg" src="/placeholder.svg" alt="Group avatar" radius="xl">{groupData.name[0]}</Avatar>
               </div>
               <div className="text-sm text-muted-foreground">Members: {groupData.members}</div>
-              <Button variant="light" fullWidth className="mt-4 hover:bg-blue-100 transition-all duration-300 ease-in-out">
+              <Button variant="light" fullWidth className="w-fit mt-4 hover:opacity-95 transition-all duration-300 ease-in-out">
                 Invite Friends
               </Button>
             </motion.div>
@@ -68,8 +68,8 @@ export default function Group() {
                   <Card shadow="md" p="lg" radius="md" withBorder>
                     <div className="mb-4">
                       <Badge color="blue" variant="light">Active</Badge>
-                      <h3 className="text-lg">{challenge.question}</h3>
                     </div>
+                    <h3 className="text-lg">{challenge.question}</h3>
                     <div className="text-sm text-muted-foreground mt-2">
                       Votes: {challenge.votes} <br />
                       Ends on: {challenge.endDate}

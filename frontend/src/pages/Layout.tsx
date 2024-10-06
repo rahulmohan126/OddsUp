@@ -1,12 +1,6 @@
 import { Flex } from "@mantine/core";
-import { Modal, Button, Title } from "@mantine/core";
-
-import { useDisclosure } from "@mantine/hooks";
-
 import { NavbarSimple } from "../components/Navbar/NavbarSimple";
-import { HeaderMenu } from "../components/Header/HeaderMenu";
-import JoinGroupChatModal from "../components/GroupChatModals/JoinGroupChatModal";
-import CreateGroupChatModal from "../components/GroupChatModals/CreateGroupChatModal";
+// import { HeaderMenu } from "../components/Header/HeaderMenu";
 
 import { GroupModalProvider } from "../components/GroupChatModals/GroupModalContext";
 
@@ -22,7 +16,7 @@ export default function Layout(props: LayoutProps) {
         <Flex direction={"row"}>
           <NavbarSimple />
           <Flex direction={"column"} w={"100%"} gap={0}>
-            <HeaderMenu />
+            {/* <HeaderMenu /> */}
             <Flex p={"xl"}>{props.children}</Flex>
           </Flex>
         </Flex>
