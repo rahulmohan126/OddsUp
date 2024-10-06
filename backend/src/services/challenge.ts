@@ -1,10 +1,10 @@
 import { supabase } from "../util/db";
 import { ChallengeBasic, Odds, Option, Selection } from "../util/models";
 
-export async function create(name: string): Promise<ChallengeBasic | null> {
+export async function create(name: string, groupId: string): Promise<ChallengeBasic | null> {
   const { data, error } = await supabase
     .from('challenge')
-    .insert({ name: name })
+    .insert({ name: name, groupid: groupId })
     .select();
 
   if (error) return null;
@@ -15,7 +15,7 @@ export async function create(name: string): Promise<ChallengeBasic | null> {
 export async function addOptions(challengeId: string, odds: Odds[]): Promise<string[] | null> {
   const oddsInsertion = odds.map(odd => {
     return {
-      challengeId: challengeId,
+      challengeid: challengeId,
       name: odd.name,
       payout: odd.payout
     }
@@ -67,9 +67,9 @@ export async function getOptions(challengeId: string): Promise<Option[] | null> 
 export async function select(memberId: string, challengeId: string, optionId: string): Promise<boolean> {
   const { error } = await supabase
     .from('selection')
-    .upsert({ memberId, challengeId, optionId }, { onConflict: 'memberId, challengeId' });
+    .upsert({ memberid: memberId, challengeid: challengeId, optionid: optionId }, { onConflict: 'memberid, challengeid' });
 
-  if (error) return false;
+ if (error) return false;
 
   return true;
 }
@@ -77,7 +77,7 @@ export async function select(memberId: string, challengeId: string, optionId: st
 export async function setWinner(challengeId: string, optionId: string): Promise<boolean> {
   const { error } = await supabase
     .from('challenge')
-    .update({ winner: optionId })
+    .update({ winner: optionId, completed: true })
     .eq('id', challengeId);
 
   if (error) return false;

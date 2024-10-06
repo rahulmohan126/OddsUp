@@ -5,7 +5,7 @@ export default function useIsAuthenticated() {
 
   useEffect(() => {
     const username = localStorage.getItem("username");
-    const checkUserData = () => {
+    const checkUserData = async () => {
       
       if (username == null) {
         setIsAuthenticated(false);

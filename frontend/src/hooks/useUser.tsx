@@ -5,8 +5,16 @@ export default function useUser() {
   const [user_id, setUser_id] = useState<string>("");
 
   useEffect(() => {
-    setUser_id(localStorage.getItem("user_id") || "");
-    setUsername(localStorage.getItem("username") || "");
+
+    const fetchData = async () => {
+      const userId = localStorage.getItem("user_id");
+      const username = localStorage.getItem("username");
+
+      if (userId && username) {
+        setUser_id(userId);
+        setUsername(username);
+      }
+    }
   }, []);
 
   return { username, user_id };

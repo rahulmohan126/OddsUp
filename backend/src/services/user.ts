@@ -3,7 +3,7 @@ import { GroupBasic, User, UserBasic } from "../util/models";
 
 export async function registerUser(email: string, password: string): Promise<{ userId: string } | null> {
   const { data, error } = await supabase.auth.signUp({ email, password });
-
+  console.log(data, error)
   if (error || !data.user) return null;
 
   return { userId: data.user.id };

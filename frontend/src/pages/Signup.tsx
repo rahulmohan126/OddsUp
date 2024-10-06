@@ -88,6 +88,7 @@ export default function Signup() {
 
       if (!response.data.success) {
         console.log("Error: " + response);
+        console.log(url)
         throw new Error("Response is null");
       }
 

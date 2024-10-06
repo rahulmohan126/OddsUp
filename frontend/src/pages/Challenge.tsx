@@ -1,29 +1,68 @@
 import Layout from "./Layout";
-import { Link } from 'react-router-dom';
-import { Card, Button, Badge, Box, Text, Group, Progress, Tooltip, ScrollArea } from '@mantine/core';
-import { motion } from 'framer-motion';
-import React, { useState } from "react";
-import Avatar, { genConfig } from 'react-nice-avatar'
+import { Link, useParams } from "react-router-dom";
+import {
+  Card,
+  Button,
+  Badge,
+  Box,
+  Text,
+  Group,
+  Progress,
+  Tooltip,
+  ScrollArea,
+} from "@mantine/core";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import Avatar, { genConfig } from "react-nice-avatar";
+import config from "../../config.json";
+import axios from "axios";
 
 const challengeData = {
-  id: '1',
-  question: 'Will Professor Smith wear his famous bowtie to the lecture this week?',
+  id: "1",
+  question:
+    "Will Professor Smith wear his famous bowtie to the lecture this week?",
   creator: {
-    name: 'Alex Johnson',
-    avatar: '/placeholder.svg?height=40&width=40'
+    name: "Alex Johnson",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
-  endDate: '2023-05-20',
+  endDate: "2023-05-20",
   totalVotes: 150,
   options: [
-    { id: '1', text: 'Yes, definitely!', votes: 80, voters: ['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7', 'User8'] },
-    { id: '2', text: 'No way!', votes: 50, voters: ['User9', 'User10', 'User11', 'User12', 'User13'] },
-    { id: '3', text: 'Maybe, it\'s a toss-up', votes: 20, voters: ['User14', 'User15'] }
-  ]
+    {
+      id: "1",
+      text: "Yes, definitely!",
+      votes: 80,
+      voters: [
+        "User1",
+        "User2",
+        "User3",
+        "User4",
+        "User5",
+        "User6",
+        "User7",
+        "User8",
+      ],
+    },
+    {
+      id: "2",
+      text: "No way!",
+      votes: 50,
+      voters: ["User9", "User10", "User11", "User12", "User13"],
+    },
+    {
+      id: "3",
+      text: "Maybe, it's a toss-up",
+      votes: 20,
+      voters: ["User14", "User15"],
+    },
+  ],
 };
 
 export default function Challenge() {
   const [voted, setVoted] = useState(false);
   const [selectedOption, setSelectedOption] = useState("0");
+  const { id_ } = useParams();
+  const [fetchedChallengeData, setFetchedChallengeData] = useState<any>([]);
 
   const handleVote = (optionId: string) => {
     if (!voted) {
@@ -31,6 +70,28 @@ export default function Challenge() {
       setVoted(true);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = `${config.serverRootURL}/challenge/getInfo`;
+      const body = { challengeId: id_ };
+
+      try {
+        const response = await axios.post(url, body);
+        console.log(response.data);
+
+        if (!response.data.success) {
+          console.log("Error: " + response);
+        }
+
+        setFetchedChallengeData(response.data.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Layout>
@@ -42,45 +103,67 @@ export default function Challenge() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card shadow="sm" padding="lg" radius="md" withBorder className="mb-8">
+            <Card
+              shadow="sm"
+              padding="lg"
+              radius="md"
+              withBorder
+              className="mb-8"
+            >
               <Group className="mb-4">
                 <Group>
-                  <Avatar className="w-12 h-12" {...genConfig(challengeData.creator.name)} />
+                  <Avatar
+                    className="w-12 h-12"
+                    {...genConfig(challengeData.creator.name)}
+                  />
                   <div>
                     <Text size="sm">{challengeData.creator.name}</Text>
-                    <Text size="xs" color="dimmed">Challenge Creator</Text>
+                    <Text size="xs" color="dimmed">
+                      Challenge Creator
+                    </Text>
                   </div>
                 </Group>
-                <Badge color="blue" variant="light">
-                  Active Challenge
-                </Badge>
+                {fetchedChallengeData.completed ? (
+                  <Badge color="yellow" variant="light">
+                    Inactive Challenge
+                  </Badge>
+                ) : (
+                  <Badge color="blue" variant="light">
+                    Active Challenge
+                  </Badge>
+                )}
               </Group>
               <Text size="xl" className="mb-4">
-                {challengeData.question}
+                {fetchedChallengeData.name}
               </Text>
-              {challengeData.options.map((option) => (
+              {fetchedChallengeData.options && fetchedChallengeData.options.map((option) => (
                 <motion.div
                   key={option.id}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Card
-                    className={`mb-4 cursor-pointer ${selectedOption === option.id ? 'bg-blue-100 text-black' : ''}`}
+                    className={`mb-4 cursor-pointer ${
+                      selectedOption === option.id
+                        ? "bg-blue-100 text-black"
+                        : ""
+                    }`}
                     onClick={() => handleVote(option.id)}
                   >
                     <Group>
-                      <Text>{option.text}</Text>
-                      {voted && <Badge color="gray">{option.votes} votes</Badge>}
+                      <Text>{option.name}</Text>
+                      {voted && (
+                        <Badge color="gray">{option.votes} votes</Badge>
+                      )}
                     </Group>
-                    {
-                      voted &&
+                    {voted && (
                       <Progress
                         value={(option.votes / challengeData.totalVotes) * 100}
                         className="mt-2"
-                        color={selectedOption === option.id ? 'blue' : 'gray'}
+                        color={selectedOption === option.id ? "blue" : "gray"}
                         animated={false}
                       />
-                    }
+                    )}
                   </Card>
                 </motion.div>
               ))}
@@ -91,7 +174,7 @@ export default function Challenge() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <Group>
-                <Button variant="subtle" component={Link} to="/group">
+                <Button variant="subtle" component={Link} to={"/group/" + fetchedChallengeData.groupId}>
                   Back to Group
                 </Button>
                 <Button variant="light" component={Link} to="/create-challenge">
@@ -109,16 +192,23 @@ export default function Challenge() {
               transition={{ duration: 0.5 }}
             >
               <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Text size="lg" className="mb-4 font-normal">Individual Votes</Text>
+                <Text size="lg" className="mb-4 font-normal">
+                  Individual Votes
+                </Text>
                 <ScrollArea style={{ height: 400 }}>
                   {challengeData.options.map((option) => (
                     <div key={option.id} className="mb-4">
-                      <Text size="sm" className="mb-2 font-medium">{option.text}</Text>
+                      <Text size="sm" className="mb-2 font-medium">
+                        {option.text}
+                      </Text>
                       <Group>
                         {option.voters.map((voter, index) => (
                           <Tooltip key={index} label={voter} withArrow>
                             <div>
-                              <Avatar className="w-8 h-8" {...genConfig(voter)} />
+                              <Avatar
+                                className="w-8 h-8"
+                                {...genConfig(voter)}
+                              />
                             </div>
                           </Tooltip>
                         ))}
