@@ -1,15 +1,15 @@
 import { supabase } from "../util/db";
 import { ChallengeBasic, Odds, Option, Selection } from "../util/models";
 
-export async function create(name: string): Promise<string | null> {
+export async function create(name: string): Promise<ChallengeBasic | null> {
   const { data, error } = await supabase
     .from('challenge')
     .insert({ name: name })
-    .select('id');
+    .select();
 
   if (error) return null;
 
-  return data[0].id;
+  return data[0] as ChallengeBasic;
 }
 
 export async function addOptions(challengeId: string, odds: Odds[]): Promise<string[] | null> {
@@ -64,32 +64,31 @@ export async function getOptions(challengeId: string): Promise<Option[] | null> 
   return data as Option[];
 }
 
-export async function makeSelection(memberId: string, challengeId: string, optionId: string): Promise<number> {
+export async function select(memberId: string, challengeId: string, optionId: string): Promise<boolean> {
   const { error } = await supabase
     .from('selection')
     .upsert({ memberId, challengeId, optionId }, { onConflict: 'memberId, challengeId' });
 
-  if (error) return 1;
+  if (error) return false;
 
-  return 0;
+  return true;
 }
 
-export async function setWinner(challengeId: string, optionId: string): Promise<number> {
+export async function setWinner(challengeId: string, optionId: string): Promise<boolean> {
   const { error } = await supabase
     .from('challenge')
     .update({ winner: optionId })
     .eq('id', challengeId);
 
-  if (error) return 1;
+  if (error) return false;
 
-  return 0;
+  return true;
 }
 
-export async function givePayout(optionId: string): Promise<number> {
-  const { error } = await supabase
-    .rpc('givePayout', { winnerOptionId: optionId });
+export async function givePayout(optionId: string): Promise<boolean> {
+  const { error } = await supabase.rpc('givepayout', { winneroptionid: optionId });
 
-  if (error) return 1;
+  if (error) return false;
 
-  return 0;
+  return true;
 }

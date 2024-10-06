@@ -53,7 +53,7 @@ export type ChallengeBasic = {
 
 
 export type Option = {
-  optionid: string
+  id: string
   challengeid: string
   name: string
   payout: number
