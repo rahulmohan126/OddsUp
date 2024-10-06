@@ -75,7 +75,7 @@ export default function CreateGroupChatModal(props: CreateGroupChatModalProps) {
     const url = `${config.serverRootURL}/group/create`;
     const body = {
       name: groupName,
-      members: [],
+      members: [localStorage.getItem("user_id")],
     };
     const res = await axios.post(url, body);
 
