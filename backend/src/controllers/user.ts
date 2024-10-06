@@ -11,31 +11,31 @@ export async function signUp(req: {email: string, username: string, password: st
     return resError("Username taken");
   }
 
-  const userId = await registerUser(req.email, req.password);
-  if (!userId) {
+  const res = await registerUser(req.email, req.password);
+  if (!res) {
     return resError("Error registering user");
   }
   
-  const created = await createUser(userId, req.username);
+  const created = await createUser(res.userId, req.username);
   if (!created) {
     return resError("Error creating user profile");
   }
 
-  return resSuccess({ id: userId, username: req.username });
+  return resSuccess({ id: res.userId, username: req.username, token: res.accessToken });
 }
 
 export async function login(req: {email: string, password: string}): Promise<OUResponse> {
-  const userId = await loginUser(req.email, req.password);
-  if (!userId) {
+  const res = await loginUser(req.email, req.password);
+  if (!res) {
     return resError("Incorrect email/password combo");
   }
 
-  const userInfo = await getInfo(userId);
+  const userInfo = await getInfo(res.userId);
   if (!userInfo) {
     return resError("Failed to get user info");
   }
 
-  return resSuccess(userInfo);
+  return resSuccess({ ...userInfo, accessToken: res.accessToken });
 }
 
 export async function getAllUserInfo(req: { userId: string }): Promise<OUResponse> {
