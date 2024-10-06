@@ -8,6 +8,9 @@ import classes from './NavbarSimple.module.css';
 import { PiSparkleFill } from 'react-icons/pi';
 import { LightDarkToggle } from '../LightDarkToggle/LightDarkToggle';
 import { Link } from 'react-router-dom';
+import { IoMdAdd } from "react-icons/io";
+import { IoCreate } from "react-icons/io5";
+import { useGroupModalContext } from '../GroupChatModals/GroupModalContext';
 
 const data = [
   { link: '/home', label: 'Home', icon: IconHome },
@@ -15,6 +18,7 @@ const data = [
 
 export function NavbarSimple() {
   const [active, setActive] = useState('Home');
+  const { openCreateGroupModal, openJoinGroupModal } = useGroupModalContext();
 
   const links = data.map((item) => (
     <Link
@@ -38,11 +42,26 @@ export function NavbarSimple() {
           <h1 className="text-xl font-light mb-2 flex">oddsup<sup className='pt-2'><PiSparkleFill /></sup></h1>
           {links}
           <a
-            className={classes.link}
+            className={`${classes.link} cursor-pointer`}
+            onClick={openCreateGroupModal}
+          >
+            <IoCreate className={classes.linkIcon} />
+            Create Group
+          </a>
+          <a
+            className={`${classes.link} cursor-pointer`}
+            onClick={openJoinGroupModal}
+          >
+            <IoMdAdd className={classes.linkIcon} />
+            Join Group
+          </a>
+          <a
+            className={`${classes.link} cursor-pointer`}
           >
             <LightDarkToggle />
             <span className='ml-2'>{"Appearance"}</span>
           </a>
+
         </div>
 
         <div className={classes.footer}>

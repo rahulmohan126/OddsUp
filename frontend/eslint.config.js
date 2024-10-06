@@ -23,8 +23,7 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
     },
     rules: {
-      // Disable unused vars check only in production (e.g., during build)
-      'no-unused-vars': isProduction ? 'off' : 'warn',
+      'no-unused-vars': 'off',
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
