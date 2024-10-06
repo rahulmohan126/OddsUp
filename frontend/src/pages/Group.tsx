@@ -1,9 +1,10 @@
 import Layout from "./Layout";
 import { Link } from 'react-router-dom';
-import { Card, Avatar, Button, Badge, Box } from '@mantine/core';
+import { Card, Button, Badge, Box } from '@mantine/core';
 import { motion } from 'framer-motion';
 import React from "react";
-import { FaChevronRight } from "react-icons/fa6";
+import { FaChevronRight, FaGem } from "react-icons/fa6";
+import Avatar, { genConfig } from 'react-nice-avatar'
 
 // Example group data (this would typically come from your API or database)
 const groupData = {
@@ -52,7 +53,7 @@ export default function Group() {
                   <h2 className="text-5xl font-bold">{groupData.name}</h2>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <Avatar size="xl" src="/placeholder.svg" alt="Group avatar" radius="xl">{groupData.name[0]}</Avatar>
+                  <Card className="rounded-xl p-10 font-bold text-5xl">{groupData.name[0]}</Card>
                   <div className="text-sm text-muted-foreground px-2 rounded-full w-fit py-1 font-semibold">{groupData.members} Members</div>
                 </div>
               </div>
@@ -79,11 +80,7 @@ export default function Group() {
                           <h3 className="text-lg">{challenge.question}</h3>
                           <div className="text-sm text-muted-foreground mt-2">
                             Votes: {challenge.votes} <br />
-                            Ends on: {challenge.endDate}
                           </div>
-                          {/* <div className="font-bold text-2xl p-3 bg-zinc-600 h w-fit rounded-full aspect-square flex flex-row items-center justify-center">
-                      {challenge.votes}
-                      </div> */}
                           <div className="flex flex-rowitems-end justify-end mt-4">
                             <FaChevronRight />
                           </div>
@@ -96,6 +93,7 @@ export default function Group() {
                   className="mt-8 text-center"
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
+
                   transition={{ delay: 0.3 }}
                 >
                   <Button component={Link} to="/create-challenge" size="lg" className="hover:shadow-lg transition-shadow duration-300">
@@ -106,31 +104,41 @@ export default function Group() {
 
               {/* Leaderboard */}
               <Box className="col-span-1">
-                <h2 className="text-2xl font-semibold mb-4 ">Leaderboard</h2>
-                <div className="space-y-4">
-                  {leaderboardData.map((user, index) => (
-                    <motion.div
-                      key={user.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: index * 0.2, duration: 0.5 }}
-                    >
-                      <Card className="flex flex-row items-start pr-32">
-                        <Avatar src={user.avatar} alt={user.name} radius="xl" className="mr-4" size="lg" />
-                        <div>
-                          <h3 className="text-lg font-semibold">{user.name}</h3>
-                          <p className="text-sm text-muted-foreground">Coins: {user.coins}</p>
-                        </div>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </div>
+                <motion.div
+                  className="p-6 rounded-lg shadow-lg"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h2 className="text-2xl font-semibold mb-4">Leaderboard</h2>
+                  <div className="space-y-4">
+                    {leaderboardData.map((user, index) => (
+                      <motion.div
+                        key={user.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.2, duration: 0.5 }}
+                      >
+                        <Card className="flex flex-row items-center justify-between gap-4 p-4">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="w-12 h-12" {...genConfig(user.name)} />
+                            <div>
+                              <h3 className="text-lg font-semibold">{user.name}</h3>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-yellow-300">
+                            <FaGem />
+                            <span className="font-semibold text-lg">{user.coins}</span>
+                          </div>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
               </Box>
             </div>
-
           </div>
-
-
         </div>
       </motion.div>
     </Layout>

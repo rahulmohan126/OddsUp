@@ -18,6 +18,7 @@ import axios from "axios"; // Import Axios
 import config from "../../config.json";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { PiSparkleFill } from "react-icons/pi";
 
 axios.defaults.withCredentials = true;
 
@@ -82,7 +83,8 @@ export default function Login() {
   return (
     <Flex align={"center"} justify={"center"} h={"100vh"}>
       <Container size={420} my={40}>
-        <Title ta="center">Welcome to {config.appName}</Title>
+        <Title ta="center" className="flex flex-row items-center justify-center">Welcome to <a className="text-xl font-light flex">oddsup<sup className='pt-2'><PiSparkleFill /></sup></a>
+        </Title>
         <Text c="dimmed" size="sm" ta="center" mt={5}>
           Do not have an account yet?{" "}
           <Anchor

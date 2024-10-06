@@ -7,28 +7,28 @@ import {
 import classes from './NavbarSimple.module.css';
 import { PiSparkleFill } from 'react-icons/pi';
 import { LightDarkToggle } from '../LightDarkToggle/LightDarkToggle';
+import { Link } from 'react-router-dom';
 
 const data = [
-  { link: '', label: 'Home', icon: IconHome },
+  { link: '/home', label: 'Home', icon: IconHome },
 ];
 
 export function NavbarSimple() {
   const [active, setActive] = useState('Home');
 
   const links = data.map((item) => (
-    <a
+    <Link
       className={`${classes.link} mb-1`}
       data-active={item.label === active || undefined}
-      href={item.link}
+      to={item.link}
       key={item.label}
-      onClick={(event) => {
-        event.preventDefault();
+      onClick={() => {
         setActive(item.label);
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
-    </a>
+    </Link>
   ));
 
   return (
