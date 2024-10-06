@@ -24,7 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/group" element={<Group />} />
-            <Route path="/challenge" element={<Challenge />} />
+            <Route path="/challenge/:id_" element={<Challenge />} />
             {/* Example of dynamic route */}
             <Route path="/group/:id_/" element={<Group />} />
             {/* Example of default route */}

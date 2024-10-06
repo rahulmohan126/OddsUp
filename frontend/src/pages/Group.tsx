@@ -158,7 +158,7 @@ export default function Group() {
                     </h2>
                     <div className="grid gap-6 md:grid-cols-2">
                       {challenges.map((challenge) => (
-                        <Link to={"/challenge"} key={challenge.id}>
+                        <Link to={"/challenge/" + challenge.id} key={challenge.id}>
                           <motion.div whileHover={{ scale: 1.02 }}>
                             <Card
                               shadow="md"
