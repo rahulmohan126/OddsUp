@@ -13,9 +13,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/api/user', require('./routes/user'))
-app.use('/api/group', require('./routes/group'))
-app.use('/api/challenge', require('./routes/challenge'))
+app.use('/api/user', require('./routes/user'));
+app.use('/api/group', require('./routes/group'));
+app.use('/api/challenge', require('./routes/challenge'));
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

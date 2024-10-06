@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 
 import * as controller from "../controllers/user"
-const router = require('express').Router()
+const router = require('express').Router();
 
 router.post('/signup', async (req: Request, res: Response) => {
   res.json(await controller.signUp(req.body));

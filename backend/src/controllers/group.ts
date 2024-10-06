@@ -1,5 +1,4 @@
-import { group } from "console";
-import { addMembers, create, getChallenges, getIdFromCode, getInfo, getMembers } from "../services/group";
+import { addMembers, create, end, getChallenges, getIdFromCode, getInfo, getMembers } from "../services/group";
 import { Group, OUResponse, resError, resSuccess } from "../util/models";
 
 export async function temp() {
@@ -14,7 +13,7 @@ export async function createGroup(req: { name: string, members: string[] }): Pro
 
   const added = await addMembers(groupInfo.id, req.members);
   if (!added) {
-    return resError("Couldn't add all members")
+    return resError("Couldn't add all members");
   }
 
   return resSuccess(groupInfo);
@@ -28,12 +27,12 @@ export async function joinFromCode(req: { userId: string, joinCode: string }): P
 
   const added = await addMembers(groupId, [req.userId]);
   if (!added) {
-    return resError("Couldn't add new member")
+    return resError("Couldn't add new member");
   }
 
   const groupInfo = await getInfo(groupId);
   if (!groupInfo) {
-    return resError("Couldn't retrieve group info")
+    return resError("Couldn't retrieve group info");
   }
 
   return resSuccess(groupInfo);
@@ -42,18 +41,27 @@ export async function joinFromCode(req: { userId: string, joinCode: string }): P
 export async function getAllGroupInfo(req: { groupId: string }): Promise<OUResponse> {
   const groupInfo = await getInfo(req.groupId);
   if (!groupInfo) {
-    return resError("Couldn't retrieve group info")
+    return resError("Couldn't retrieve group info");
   }
 
   const challenges = await getChallenges(req.groupId);
   if (!challenges) {
-    return resError("Couldn't retrieve group challenges")
+    return resError("Couldn't retrieve group challenges");
   }
 
   const members = await getMembers(req.groupId);
   if (!members) {
-    return resError("Couldn't retrieve group members")
+    return resError("Couldn't retrieve group members");
   }
 
   return resSuccess({ ...groupInfo, challenges, members } as Group);
+}
+
+export async function endGroup(req: { groupId: string }): Promise<OUResponse> {
+  const success = await end(req.groupId);
+  if (!success) {
+    return resError("Couldn't end group");
+  }
+
+  return resSuccess({ groupId: req.groupId });
 }

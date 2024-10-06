@@ -18,7 +18,7 @@ export async function signUp(req: {email: string, username: string, password: st
   
   const created = await createUser(userId, req.username);
   if (!created) {
-    return resError("Error creating user profile")
+    return resError("Error creating user profile");
   }
 
   return resSuccess({ id: userId, username: req.username });

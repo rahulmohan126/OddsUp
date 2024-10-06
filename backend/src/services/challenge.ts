@@ -19,7 +19,8 @@ export async function addOptions(challengeId: string, odds: Odds[]): Promise<str
       name: odd.name,
       payout: odd.payout
     }
-  })
+  });
+
   const { data, error } = await supabase
     .from('oddsoption')
     .insert(oddsInsertion)

@@ -81,13 +81,13 @@ export async function getIdFromCode(joinCode: string): Promise<string | null> {
   return data[0].id;
 }
 
-export async function end(groupId: string): Promise<number> {
+export async function end(groupId: string): Promise<boolean> {
   const { error } = await supabase
     .from('usergroup')
     .update({ end: true })
     .eq('id', groupId);
 
-  if (error) return 1;
+  if (error) return false;
 
-  return 0;
+  return true;
 }
