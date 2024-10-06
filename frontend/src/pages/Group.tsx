@@ -4,7 +4,9 @@ import { Card, Button, Badge, Box, Tabs } from "@mantine/core";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { FaChevronRight, FaGem, FaPlus } from "react-icons/fa6";
-import Avatar, { genConfig } from "react-nice-avatar";
+import Avatar, { genConfig } from 'react-nice-avatar'
+import { useDisclosure } from "@mantine/hooks";
+import CreateChallenge from "../components/Challenge/CreateChallenge";
 import { useParams } from "react-router-dom";
 import config from "../../config.json";
 import axios from "axios";
@@ -77,6 +79,10 @@ interface GroupProps {
 }
 
 export default function Group() {
+  const [
+    openedCreateGroupModal,
+    { open: openCreateGroupModal, close: closeCreateGroupModal },
+  ] = useDisclosure(false);
   const { id_ } = useParams<string>();
 
   const [groupName, setGroupName] = useState<string>("");
@@ -224,13 +230,8 @@ export default function Group() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <Button
-                        component={Link}
-                        to="/create-challenge"
-                        size="lg"
-                        className="hover:shadow-lg transition-shadow duration-300"
-                        leftSection={<FaPlus />}
-                      >
+                      <CreateChallenge groupId={0} close={closeCreateGroupModal} opened={openedCreateGroupModal} />
+                      <Button onClick={openCreateGroupModal} size="lg" className="hover:shadow-lg transition-shadow duration-300" leftSection={<FaPlus />}>
                         Create New Challenge
                       </Button>
                     </motion.div>
