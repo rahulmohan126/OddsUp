@@ -10,10 +10,6 @@ export type UserBasic = {
   username: string
 }
 
-export type UserWithToken = UserBasic & {
-  accessToken: string
-}
-
 export type Member = {
   userid: string
   groupid: string

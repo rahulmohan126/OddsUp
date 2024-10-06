@@ -1,5 +1,5 @@
 import { checkUsernameAvailable, createUser, getGroups, getInfo, loginUser, registerUser } from "../services/user";
-import { OUResponse, resError, resSuccess, User, UserBasic, UserWithToken } from "../util/models";
+import { OUResponse, resError, resSuccess, User, UserBasic } from "../util/models";
 import { LoginReq, SignInReq, GetUserReq } from "../util/reqBody";
 
 export async function signUp(req: SignInReq): Promise<OUResponse> {
@@ -18,7 +18,7 @@ export async function signUp(req: SignInReq): Promise<OUResponse> {
     return resError("Error creating user profile");
   }
 
-  return resSuccess({ id: res.userId, username: req.username, accessToken: res.accessToken } as UserWithToken);
+  return resSuccess({ id: res.userId, username: req.username } as UserBasic);
 }
 
 export async function login(req: LoginReq): Promise<OUResponse> {
@@ -32,7 +32,7 @@ export async function login(req: LoginReq): Promise<OUResponse> {
     return resError("Failed to get user info");
   }
 
-  return resSuccess({ ...userInfo, accessToken: res.accessToken } as UserWithToken);
+  return resSuccess(userInfo as UserBasic);
 }
 
 export async function getAllUserInfo(req: GetUserReq): Promise<OUResponse> {
