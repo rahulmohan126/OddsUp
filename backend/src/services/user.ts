@@ -6,7 +6,7 @@ export async function registerUser(email: string, password: string): Promise<{ u
 
   if (error || !data.user || !data.session) return null;
 
-  return { userId: data.user.id, accessToken: data.session.access_token};
+  return { userId: data.user.id, accessToken: data.session.access_token };
 }
 
 export async function checkUsernameAvailable(username: string): Promise<boolean> {
@@ -39,7 +39,7 @@ export async function loginUser(email: string, password: string): Promise<{ user
   return { userId: data.user.id, accessToken: data.session.access_token };
 }
 
-export async function getInfo(userId: string): Promise<UserBasic|null> {
+export async function getInfo(userId: string): Promise<UserBasic | null> {
   const { data, error } = await supabase
     .from('oddsupuser')
     .select()

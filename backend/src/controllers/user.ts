@@ -1,11 +1,11 @@
 import { checkUsernameAvailable, createUser, getGroups, getInfo, loginUser, registerUser } from "../services/user";
-import { OUResponse, resError, resSuccess, User, UserBasic } from "../util/models";
+import { OUResponse, resError, resSuccess, User, UserWithToken } from "../util/models";
 
 export async function temp() {
   return null;
 }
 
-export async function signUp(req: {email: string, username: string, password: string}): Promise<OUResponse> {
+export async function signUp(req: { email: string, username: string, password: string }): Promise<OUResponse> {
   const isAvailable = await checkUsernameAvailable(req.username);
   if (!isAvailable) {
     return resError("Username taken");
@@ -15,16 +15,16 @@ export async function signUp(req: {email: string, username: string, password: st
   if (!res) {
     return resError("Error registering user");
   }
-  
+
   const created = await createUser(res.userId, req.username);
   if (!created) {
     return resError("Error creating user profile");
   }
 
-  return resSuccess({ id: res.userId, username: req.username, token: res.accessToken });
+  return resSuccess({ id: res.userId, username: req.username, accessToken: res.accessToken } as UserWithToken);
 }
 
-export async function login(req: {email: string, password: string}): Promise<OUResponse> {
+export async function login(req: { email: string, password: string }): Promise<OUResponse> {
   const res = await loginUser(req.email, req.password);
   if (!res) {
     return resError("Incorrect email/password combo");
@@ -35,7 +35,7 @@ export async function login(req: {email: string, password: string}): Promise<OUR
     return resError("Failed to get user info");
   }
 
-  return resSuccess({ ...userInfo, accessToken: res.accessToken });
+  return resSuccess({ ...userInfo, accessToken: res.accessToken } as UserWithToken);
 }
 
 export async function getAllUserInfo(req: { userId: string }): Promise<OUResponse> {
@@ -49,5 +49,5 @@ export async function getAllUserInfo(req: { userId: string }): Promise<OURespons
     return resError("Failed to retrieve user's groups");
   }
 
-  return resSuccess({ ...info, groups });
+  return resSuccess({ ...info, groups } as User);
 }

@@ -2,8 +2,8 @@ import { supabase } from "../util/db";
 import { ChallengeBasic, GroupBasic, Member } from "../util/models";
 
 function generateJoinCode(): string {
-  var code = (Math.random()+0.1).toString(36).slice(2,8);
-  if (code.length < 6) code = code.repeat(6).slice(0,6);
+  var code = (Math.random() + 0.1).toString(36).slice(2, 8);
+  if (code.length < 6) code = code.repeat(6).slice(0, 6);
   return code.toUpperCase();
 }
 
@@ -12,7 +12,7 @@ export async function getInfo(groupId: string): Promise<GroupBasic | null> {
     .from('usergroup')
     .select('id, name, joincode, ended')
     .eq('id', groupId);
-  
+
   if (error) return null;
 
   return data[0] as GroupBasic;
@@ -45,7 +45,7 @@ export async function create(name: string): Promise<GroupBasic | null> {
     .from('usergroup')
     .insert({ name: name, joincode: generateJoinCode() })
     .select();
-  
+
   if (error) return null;
 
   return data[0] as GroupBasic;
@@ -63,7 +63,7 @@ export async function addMembers(groupId: string, members: string[]): Promise<bo
   const { error } = await supabase
     .from('member')
     .insert(memberInsertions);
-  
+
   if (error) return false;
 
   return true;

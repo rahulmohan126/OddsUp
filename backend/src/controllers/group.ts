@@ -63,5 +63,5 @@ export async function endGroup(req: { groupId: string }): Promise<OUResponse> {
     return resError("Couldn't end group");
   }
 
-  return resSuccess({ groupId: req.groupId });
+  return resSuccess(true);
 }

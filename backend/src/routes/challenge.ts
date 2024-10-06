@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-
 import * as controller from "../controllers/challenge"
 
 const router = require('express').Router();
